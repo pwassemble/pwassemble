@@ -1,4 +1,21 @@
 {
-  "name": "PWAssemble",
-  "gcm_sender_id": "884875544344"
+  "name": "DER Touristik",
+  "short_name": "DER Tour",
+  "gcm_sender_id": "884875544344",
+  "start_url": "/custom.html",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": ".\/img\/logo.png",
+      "sizes": "192x192",
+      "type": "image\/png"
+    },
+    {
+      "src": ".\/img\/logo.svg",
+      "sizes": "512x512",
+      "type": "image\/svg"
+    }
+  ],
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff"
 }

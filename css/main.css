@@ -8,3 +8,11 @@ body {
   margin: 0;
 }
 
+img {
+  filter: blur(0px);
+  transition: filter 3s;
+}
+
+.img--blur {
+  filter: blur(10px);
+}
