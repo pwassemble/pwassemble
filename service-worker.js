@@ -12,7 +12,7 @@ const STATIC_FILES = [
   './js/firebase.js',
   './js/idb-keyval-min.js',
   './css/main.css',
-  './img/placeholder.svg'
+  './img/placeholder.svg',
   './img/fallback.svg'
 ];
 
