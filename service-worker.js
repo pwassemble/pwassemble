@@ -3,19 +3,49 @@ const DEBUG_PREFIX = '👷';
 
 const STATIC_CACHE_NAME = 'pwassemble-static-cache-v1';
 const DYNAMIC_CACHE_NAME = 'pwassemble-dynamic-cache-v1';
-
+console.log(self)
 const STATIC_FILES = [
-  '/',
-  '/index.html',
-  '/js/bootstrap.js',
-  '/js/main.js',
-  '/css/main.css',
-  '/img/fallback.svg'
+  './',
+  './index.html',
+  './js/bootstrap.js',
+  './js/main.js',
+  './js/idb-keyval-min.js',
+  './css/main.css',
+  './img/fallback.svg'
 ];
+
+const REQUEST_STRATEGIES = new Map();
+REQUEST_STRATEGIES.set(new RegExp(location.host.replace(/\./g, '\\.')), {
+  strategy: 'cacheFirst',
+  cache: false
+});
+REQUEST_STRATEGIES.set(/www\.gstatic\.com/, {
+  strategy: 'cacheFirst',
+  cache: true
+});
+REQUEST_STRATEGIES.set(/apis\.google\.com/, {
+  strategy: 'networkFirst',
+  cache: true
+});
+REQUEST_STRATEGIES.set(/www\.googleapis\.com/, {
+  strategy: 'networkFirst',
+  cache: true
+});
+REQUEST_STRATEGIES.set(/firebasestorage\.googleapis\.com/, {
+  strategy: 'networkFirst',
+  cache: true
+});
 
 const addToCache = (request, networkResponse) => {
   const requestUrl = request.url;
-  if (!/\/img\//.test(requestUrl)) {
+  let cache = false;
+  for (let [pattern, strategyObj] of REQUEST_STRATEGIES) {
+    if (pattern.test(requestUrl)) {
+      cache = strategyObj.cache;
+      break;
+    }
+  }
+  if (!cache) {
     return;
   }
   if (DEBUG_MODE) {
@@ -58,28 +88,17 @@ const getCacheResponse = request => {
   });
 };
 
-const getNetworkResponse = request => {
+const getNetworkResponse = (request, options = {}) => {
   const requestUrl = request.url;
   if (DEBUG_MODE) {
-    console.log(DEBUG_PREFIX, 'Getting from network', requestUrl);
+    console.log(DEBUG_PREFIX,
+        `Getting from network with mode ${options && options.mode ? '"no-cors"' : '"cors"'}`,
+        requestUrl);
   }
-  let options = {};
-  if ((new URL(requestUrl).host !== self.location.host) &&
-      (new URL(requestUrl).host !== 'firebasestorage.googleapis.com')) {
-    options.mode = 'no-cors';
-  }
-  /*
-  if (new URL(requestUrl).host === 'firebasestorage.googleapis.com') {
-    options.mode = 'cors';
-    let newRequest = new Request(requestUrl, options);
-    request = newRequest;
-  }*/
   return fetch(request, options)
   .then(networkResponse => {
-    console.log(request)
-    console.log(networkResponse);
     if (networkResponse.type !== 'opaque' && !networkResponse.ok) {
-      throw Error(networkResponse.ok + ' => ' + requestUrl);
+      throw Error(requestUrl);
     }
     if (DEBUG_MODE) {
       console.log(DEBUG_PREFIX, 'Successfully fetched from network',
@@ -87,12 +106,19 @@ const getNetworkResponse = request => {
     }
     return networkResponse;
   }).catch(networkError => {
-    console.log('networkError')
-    console.log(networkError)
-    if (DEBUG_MODE) {
-      console.log(DEBUG_PREFIX, 'Error fetching from network', requestUrl);
+    if (Object.keys(options).length) {
+      if (DEBUG_MODE) {
+        console.log(DEBUG_PREFIX, 'Error fetching from network', requestUrl);
+      }
+      return Promise.reject(networkError);
+    } else {
+      if (DEBUG_MODE) {
+        console.log(DEBUG_PREFIX,
+            'Error fetching from network, retrying with mode "no-cors"',
+            requestUrl);
+      }
+      return getNetworkResponse(request, {mode: 'no-cors'});
     }
-    return Promise.reject(networkError);
   });
 };
 
@@ -159,23 +185,40 @@ self.addEventListener('activate', activateEvent => {
       console.log(DEBUG_PREFIX, 'Claiming clients');
     }
     return self.clients.claim();
+  }).then(() => {
+    return self.clients.matchAll().then(clients => {
+      caches.open(STATIC_CACHE_NAME)
+      .then(cache => {
+        clients.forEach(client => {
+          cache.add(client.url);
+        });
+      });
+    });
   }));
 });
 
 self.addEventListener('fetch', fetchEvent => {
   const requestUrl = fetchEvent.request.url;
-  if (/\/img\//.test(requestUrl)) {
+  let strategy = 'networkFirst';
+  for (let [pattern, strategyObj] of REQUEST_STRATEGIES) {
+    if (pattern.test(requestUrl)) {
+      strategy = strategyObj.strategy;
+      break;
+    }
+  }
+  if (strategy === 'cacheFirst') {
     if (DEBUG_MODE) {
       console.log(DEBUG_PREFIX, 'Fetch cache first', requestUrl);
     }
     fetchEvent.respondWith(getCacheFirstResponse(fetchEvent.request));
     return;
+  } else if (strategy === 'networkFirst') {
+    if (DEBUG_MODE) {
+      console.log(DEBUG_PREFIX, 'Fetch network first', requestUrl);
+    }
+    fetchEvent.respondWith(getNetworkFirstResponse(fetchEvent.request));
+    return;
   }
-  if (DEBUG_MODE) {
-    console.log(DEBUG_PREFIX, 'Fetch network first', requestUrl);
-  }
-  fetchEvent.respondWith(getNetworkFirstResponse(fetchEvent.request));
-  return;
 });
 
 self.addEventListener('push', pushEvent => {
