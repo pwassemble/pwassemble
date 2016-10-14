@@ -81,11 +81,17 @@
         }
         idbKeyval.set(id, finalResults);
         return finalResults;
+      })
+      .catch(error => {
+        throw error;
       });
     }
   })
   .then(instance => {
     document.body.innerHTML +=
         `<pre>${JSON.stringify(instance, null, 2)}</pre>`;
+  })
+  .catch(error => {
+    throw error;
   });
 })();
