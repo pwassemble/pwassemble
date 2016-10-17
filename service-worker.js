@@ -3,7 +3,6 @@ const DEBUG_PREFIX = '👷';
 
 const STATIC_CACHE_NAME = 'pwassemble-static-cache-v1';
 const DYNAMIC_CACHE_NAME = 'pwassemble-dynamic-cache-v1';
-console.log(self)
 const STATIC_FILES = [
   './',
   './index.html',

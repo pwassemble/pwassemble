@@ -37,6 +37,9 @@
         return snapshot.val();
       })
       .then(results => {
+        if (!results) {
+          return Promise.reject(`Could not find instance ${id}`);
+        }
         const promises = [Promise.resolve(results)];
         const dynamicComponents = [
           'companyLogoImgId',
@@ -44,18 +47,27 @@
           'iconImgId',
         ];
         dynamicComponents.forEach(dynamicComponent => {
-          let dynamicKey = results[dynamicComponent];
-          if (dynamicComponent === 'companyLogoImgId') {
+          let dynamicKey = false;
+          if ((dynamicComponent === 'companyLogoImgId') &&
+              (results.companyLogoImgName)) {
             dynamicKey =
-                `${dynamicKey}.${results['companyLogoImgName'].split('.')[1]}`;
+                `${results[dynamicComponent]}.${results['companyLogoImgName']
+                .split('.')[1]}`;
           }
-          else if (dynamicComponent === 'heroImgId') {
+          else if ((dynamicComponent === 'heroImgId') &&
+                   (results['heroImgId'])) {
             dynamicKey =
-                `${dynamicKey}.${results['heroImgName'].split('.')[1]}`;
+                `${results[dynamicComponent]}.${results['heroImgName']
+                .split('.')[1]}`;
           }
-          else if (dynamicComponent === 'iconImgId') {
+          else if ((dynamicComponent === 'iconImgId') &&
+                   (results['iconImgId'])) {
             dynamicKey =
-                `${dynamicKey}.${results['iconImgName'].split('.')[1]}`;
+                `${results[dynamicComponent]}.${results['iconImgName']
+                .split('.')[1]}`;
+          }
+          if (!dynamicKey) {
+            return;
           }
           promises.push(
             storage.ref(dynamicKey).getDownloadURL()
