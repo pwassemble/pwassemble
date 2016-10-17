@@ -12,7 +12,6 @@ const STATIC_FILES = [
   './libs/idb-keyval-min.js',
   './libs/url-search-params-min.js',
   './css/main.css',
-  './img/placeholder.svg',
   './img/fallback.svg'
 ];
 
@@ -86,7 +85,7 @@ const getCacheResponse = request => {
     if (DEBUG_MODE) {
       console.log(DEBUG_PREFIX, 'Error fetching from cache', requestUrl);
     }
-    return Promise.reject(cacheError);
+    return Promise.reject(cacheResponse);
   });
 };
 
@@ -94,7 +93,8 @@ const getNetworkResponse = (request, options = {}) => {
   const requestUrl = request.url;
   if (DEBUG_MODE) {
     console.log(DEBUG_PREFIX,
-        `Getting from network with mode ${options && options.mode ? '"no-cors"' : '"cors"'}`,
+        `Getting from network with mode ${options && options.mode ?
+        '"no-cors"' : '"cors"'}`,
         requestUrl);
   }
   return fetch(request, options)
@@ -112,7 +112,7 @@ const getNetworkResponse = (request, options = {}) => {
       if (DEBUG_MODE) {
         console.log(DEBUG_PREFIX, 'Error fetching from network', requestUrl);
       }
-      return Promise.reject(networkError);
+      return Promise.reject(networkResponse);
     } else {
       if (DEBUG_MODE) {
         console.log(DEBUG_PREFIX,
