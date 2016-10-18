@@ -13,7 +13,9 @@ const STATIC_FILES = [
   './libs/idb-keyval-min.js',
   './libs/url-search-params-min.js',
   './css/main.css',
-  './img/fallback.svg'
+  './img/fallback.svg',
+  './img/yes.png',
+  './img/no.png'
 ];
 
 const REQUEST_STRATEGIES = new Map();
@@ -48,6 +50,9 @@ const addToCache = (request, networkResponse) => {
     }
   }
   if (!cache) {
+    if (DEBUG_MODE) {
+      console.log(DEBUG_PREFIX, 'Not adding to cache', requestUrl);
+    }
     return;
   }
   if (DEBUG_MODE) {
@@ -59,7 +64,8 @@ const addToCache = (request, networkResponse) => {
       console.log(DEBUG_PREFIX, 'Successfully added to cache', requestUrl);
     }
     return cache.put(request, networkResponse);
-  }).catch(cacheError => {
+  })
+  .catch(cacheError => {
     if (DEBUG_MODE) {
       console.log(DEBUG_PREFIX, 'Error adding to cache', requestUrl,
           cacheError);
@@ -82,11 +88,12 @@ const getCacheResponse = request => {
       console.log(DEBUG_PREFIX, 'Successfully fetched from cache', requestUrl);
     }
     return cacheResponse;
-  }).catch(cacheError => {
+  })
+  .catch(cacheError => {
     if (DEBUG_MODE) {
       console.log(DEBUG_PREFIX, 'Error fetching from cache', requestUrl);
     }
-    return Promise.reject(cacheResponse);
+    return Promise.reject(cacheError);
   });
 };
 
@@ -108,20 +115,20 @@ const getNetworkResponse = (request, options = {}) => {
           requestUrl);
     }
     return networkResponse;
-  }).catch(networkError => {
+  })
+  .catch(networkError => {
     if (Object.keys(options).length) {
       if (DEBUG_MODE) {
         console.log(DEBUG_PREFIX, 'Error fetching from network', requestUrl);
       }
-      return Promise.reject(networkResponse);
-    } else {
-      if (DEBUG_MODE) {
-        console.log(DEBUG_PREFIX,
-            'Error fetching from network, retrying with mode "no-cors"',
-            requestUrl);
-      }
-      return getNetworkResponse(request, {mode: 'no-cors'});
+      return Promise.reject(networkError);
     }
+    if (DEBUG_MODE) {
+      console.log(DEBUG_PREFIX,
+          'Error fetching from network, retrying with mode "no-cors"',
+          requestUrl);
+    }
+    return getNetworkResponse(request, {mode: 'no-cors'});
   });
 };
 
@@ -130,9 +137,10 @@ const getNetworkFirstResponse = request => {
   .then(networkResponse => {
     addToCache(request, networkResponse.clone());
     return networkResponse;
-  }).catch(() => {
+  })
+  .catch(() => {
     return getCacheResponse(request)
-    .catch(cacheMatchError => cacheMatchError);
+    .catch(() => Response.error());
   });
 };
 
@@ -143,7 +151,8 @@ const getCacheFirstResponse = request => {
     .then(networkResponse => {
       addToCache(request, networkResponse.clone());
       return networkResponse;
-    }).catch(networkError => networkError);
+    })
+    .catch(() => Response.error());
   });
 };
 
@@ -160,7 +169,8 @@ self.addEventListener('install', installEvent => {
           }).join(''));
     }
     return cache.addAll(STATIC_FILES);
-  }).then(() => {
+  })
+  .then(() => {
     if (DEBUG_MODE) {
       console.log(DEBUG_PREFIX, 'Skip waiting on install');
     }
@@ -183,18 +193,21 @@ self.addEventListener('activate', activateEvent => {
       }
       return true;
     }));
-  }).then(() => {
+  })
+  .then(() => {
     if (DEBUG_MODE) {
       console.log(DEBUG_PREFIX, 'Claiming clients');
     }
     return self.clients.claim();
-  }).then(() => {
-    return self.clients.matchAll().then(clients => {
-      caches.open(STATIC_CACHE_NAME)
-      .then(cache => {
-        clients.forEach(client => {
-          cache.add(client.url);
-        });
+  })
+  .then(() => {
+    return self.clients.matchAll();
+  })
+  .then(clients => {
+    caches.open(STATIC_CACHE_NAME)
+    .then(cache => {
+      clients.forEach(client => {
+        cache.add(client.url);
       });
     });
   }));
@@ -232,7 +245,8 @@ self.addEventListener('push', pushEvent => {
   .then(fetchResponse => fetchResponse.json())
   .then(pushMessage => {
     self.registration.showNotification(pushMessage.title, pushMessage.message);
-  }).catch(() => {
+  })
+  .catch(() => {
     self.registration.showNotification('New push notification');
   }));
 });

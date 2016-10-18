@@ -1,6 +1,9 @@
+/* global instanceLoader, manifestCreator, serviceWorkerInstaller */
 (() => {
-  loadInstance()
-  .then(instance => {
+  let instance;
+  instanceLoader.load()
+  .then(instance_ => {
+    instance = instance_;
     if (!Object.keys(instance).length) {
       return;
     }
@@ -40,6 +43,9 @@
     };
 
     for (let key in instance) {
+      if (!{}.hasOwnProperty.call(instance, key)) {
+        continue;
+      }
       const value = instance[key];
       if (key === 'companyName') {
         createElement('h1', key, value);
@@ -65,7 +71,7 @@
       const cssUrl = URL.createObjectURL(new Blob(
           [`:root {\n${cssText.join('\n  ')}\n}`], {type: 'text/css'}));
       createCss(cssUrl);
-    };
+    }
     // Create manifest
     const name = instance.companyName;
     const shortName = instance.companyName;
@@ -73,13 +79,34 @@
     const themeColor = instance.colorFgPrimary;
     const backgroundColor = instance.colorBgPrimary;
     const startUrl = `${location.origin}/?id=${instance.pwaInstanceId}`;
-    const manifestString = getManifest(name, shortName, iconSrc, themeColor,
-        backgroundColor, startUrl);
+    const manifestObject = {name, shortName, iconSrc, themeColor,
+        backgroundColor, startUrl};
+    const manifestString = manifestCreator.create(manifestObject);
     const manifestUrl = URL.createObjectURL(new Blob(
         [manifestString], {type: 'application/json'}));
     createManifest(manifestUrl);
-  }).then(() => {
-    installServiceWorker();
+  })
+  .then(() => {
+    return serviceWorkerInstaller.install();
+  })
+  .then(serviceWorkerRegistration => {
+    const title = instance.companyName;
+    const options = {
+      body: instance.ctaText.replace(/\+/g, ' '),
+      icon: instance.iconImgId,
+      vibrate: [200, 100, 200, 100, 200, 100, 400],
+      actions: [
+        {action: 'yes', title: 'Yes', icon: './img/yes.png'},
+        {action: 'no', title: 'No', icon: './img/no.png'}
+      ]
+    };
+    const imgs = document.querySelectorAll('img');
+    for (let i = 0, lenI = imgs.length; i < lenI; i++) {
+      let img = imgs[i];
+      img.addEventListener('click', () => {
+        serviceWorkerRegistration.showNotification(title, options);
+      });
+    }
   })
   .catch(error => {
     throw error;
@@ -91,13 +118,9 @@
   const imgs = document.querySelectorAll('img');
   for (let i = 0, lenI = imgs.length; i < lenI; i++) {
     let img = imgs[i];
-    //img.style.backgroundImage = `url(${img.dataset.src})`;
     setTimeout(() => {
       img.classList.remove('img--blur');
-      // eslint-disable-next-line max-len
-      //img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
       img.src = img.dataset.src;
     }, Math.random() * 3000);
   }
 })();
-

@@ -30,7 +30,6 @@
     "extends": "google",
     "env": {
       "browser": true,
-      "node": true,
       "serviceworker": true
     }
   }
