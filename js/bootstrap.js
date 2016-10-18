@@ -4,7 +4,7 @@
     if (!Object.keys(instance).length) {
       return;
     }
-
+    document.title = instance.companyName;
     const body = document.body;
     const head = document.head;
     let cssText = [];
@@ -16,7 +16,7 @@
     };
     const createImg = (key, value) => {
       const elem = document.createElement('img');
-      elem.classList.add(key);
+      elem.classList.add([key, 'img--blur']);
       elem.src = value;
       body.appendChild(elem);
     };
@@ -32,51 +32,58 @@
       elem.href = value;
       head.appendChild(elem);
     };
+    const createManifest = value => {
+      const elem = document.createElement('link');
+      elem.rel = 'manifest';
+      elem.href = value;
+      head.appendChild(elem);
+    };
 
     for (let key in instance) {
       const value = instance[key];
       if (key === 'companyName') {
         createElement('h1', key, value);
-      }
-      else if (key === 'ctaText') {
+      } else if (key === 'ctaText') {
         createElement('h2', key, value);
-      }
-      else if (key === 'heroText') {
+      } else if (key === 'heroText') {
         createElement('h3', key, value);
-      }
-      else if (key === 'subText') {
+      } else if (key === 'subText') {
         createElement('h4', key, value);
-      }
-
-      else if (key === 'companyLogoImgId') {
+      } else if (key === 'companyLogoImgId') {
         createImg(key, value);
-      }
-      else if (key === 'heroImgId') {
+      } else if (key === 'heroImgId') {
         createImg(key, value);
-      }
-      else if (key === 'iconImgId') {
+      } else if (key === 'iconImgId') {
         createFavicon(value);
       } else if ((key === 'colorBgPrimary' || (key === 'colorBgSecondary') ||
                  (key === 'colorFgPrimary') || (key === 'colorFgSecondary'))) {
         cssText.push(`--${key}: ${value};`);
       }
     }
+    // Create CSS
     if (cssText.length) {
-      const cssUrl = URL.createObjectURL(
-          new Blob([`:root {\n${cssText.join('\n  ')}\n}`], {type: 'text/css'}));
+      const cssUrl = URL.createObjectURL(new Blob(
+          [`:root {\n${cssText.join('\n  ')}\n}`], {type: 'text/css'}));
       createCss(cssUrl);
     };
+    // Create manifest
+    const name = instance.companyName;
+    const shortName = instance.companyName;
+    const iconSrc = instance.iconImgId;
+    const themeColor = instance.colorFgPrimary;
+    const backgroundColor = instance.colorBgPrimary;
+    const startUrl = `${location.origin}/?id=${instance.pwaInstanceId}`;
+    const manifestString = getManifest(name, shortName, iconSrc, themeColor,
+        backgroundColor, startUrl);
+    const manifestUrl = URL.createObjectURL(new Blob(
+        [manifestString], {type: 'application/json'}));
+    createManifest(manifestUrl);
+  }).then(() => {
+    installServiceWorker();
   })
   .catch(error => {
     throw error;
   });
-
-  /*{
-    "rssFeed": "http://gplusrss.com/rss/feed/a2da4a7153a0b9825defb3aaf592bac857fdee28391ed",
-
-    "template": "travel"
-  }*/
-
 })();
 
 // Simulate slow image loading

@@ -2,7 +2,6 @@ const loadInstance = () => {
   return new Promise((resolve, reject) => {
     const DEBUG_MODE = true;
     const DEBUG_PREFIX = '🕸';
-    const DYNAMIC_CACHE_NAME = 'pwassemble-dynamic-cache-v1';
 
     if (!location.search) {
       return reject(console.log('No query parameters'));

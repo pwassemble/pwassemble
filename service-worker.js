@@ -6,6 +6,7 @@ const DYNAMIC_CACHE_NAME = 'pwassemble-dynamic-cache-v1';
 const STATIC_FILES = [
   './',
   './index.html',
+  './manifest.js',
   './js/bootstrap.js',
   './js/main.js',
   './js/firebase.js',

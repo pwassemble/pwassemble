@@ -1,5 +1,5 @@
 // Register Service Worker and sign up for push notifications
-(() => {
+const installServiceWorker = () => {
   const DEBUG_MODE = true;
   const DEBUG_PREFIX = '🕸';
   const GCM_API_URL = 'https://android.googleapis.com/gcm/send/';
@@ -56,4 +56,4 @@
   } else {
     console.log(DEBUG_PREFIX, 'Service Worker not supported');
   }
-})();
+};
