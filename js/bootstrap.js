@@ -1,6 +1,64 @@
 /* global instanceLoader, manifestCreator, serviceWorkerInstaller */
 (() => {
   let instance;
+  let serviceWorkerRegistration;
+
+  const body = document.body;
+  const head = document.head;
+
+  // Helper function for push notifications
+  const setUpPushNotifications = () => {
+    const title = instance.companyName;
+    const options = {
+      body: instance.ctaText.replace(/\+/g, ' '),
+      icon: instance.iconImgId,
+      vibrate: [200, 100, 200, 100, 200, 100, 400],
+      actions: [
+        {action: 'yes', title: 'Yes', icon: './img/yes.png'},
+        {action: 'no', title: 'No', icon: './img/no.png'}
+      ]
+    };
+    const imgs = document.querySelectorAll('img');
+    const showNotification = () => {
+      serviceWorkerRegistration.showNotification(title, options);
+    };
+    for (let i = 0, lenI = imgs.length; i < lenI; i++) {
+      let img = imgs[i];
+      img.addEventListener('click', showNotification);
+    }
+  };
+  // Helper functions for creating HTML elements
+  const createElement = (tagName, key, value) => {
+    const elem = document.createElement(tagName);
+    elem.classList.add(key);
+    elem.textContent = value.replace(/\+/g, ' ');
+    body.appendChild(elem);
+  };
+  const createImg = (key, value) => {
+    const elem = document.createElement('img');
+    elem.classList.add([key, 'img--blur']);
+    elem.src = value;
+    body.appendChild(elem);
+  };
+  const createFavicon = value => {
+    const elem = document.createElement('link');
+    elem.rel = 'icon';
+    elem.href = value;
+    head.appendChild(elem);
+  };
+  const createCss = value => {
+    const elem = document.createElement('link');
+    elem.rel = 'stylesheet';
+    elem.href = value;
+    head.appendChild(elem);
+  };
+  const createManifest = value => {
+    const elem = document.createElement('link');
+    elem.rel = 'manifest';
+    elem.href = value;
+    head.appendChild(elem);
+  };
+
   instanceLoader.load()
   .then(instance_ => {
     instance = instance_;
@@ -8,39 +66,7 @@
       return;
     }
     document.title = instance.companyName;
-    const body = document.body;
-    const head = document.head;
     let cssText = [];
-    const createElement = (tagName, key, value) => {
-      const elem = document.createElement(tagName);
-      elem.classList.add(key);
-      elem.textContent = value.replace(/\+/g, ' ');
-      body.appendChild(elem);
-    };
-    const createImg = (key, value) => {
-      const elem = document.createElement('img');
-      elem.classList.add([key, 'img--blur']);
-      elem.src = value;
-      body.appendChild(elem);
-    };
-    const createFavicon = value => {
-      const elem = document.createElement('link');
-      elem.rel = 'icon';
-      elem.href = value;
-      head.appendChild(elem);
-    };
-    const createCss = value => {
-      const elem = document.createElement('link');
-      elem.rel = 'stylesheet';
-      elem.href = value;
-      head.appendChild(elem);
-    };
-    const createManifest = value => {
-      const elem = document.createElement('link');
-      elem.rel = 'manifest';
-      elem.href = value;
-      head.appendChild(elem);
-    };
 
     for (let key in instance) {
       if (!{}.hasOwnProperty.call(instance, key)) {
@@ -73,40 +99,24 @@
       createCss(cssUrl);
     }
     // Create manifest
-    const name = instance.companyName;
-    const shortName = instance.companyName;
-    const iconSrc = instance.iconImgId;
-    const themeColor = instance.colorFgPrimary;
-    const backgroundColor = instance.colorBgPrimary;
-    const startUrl = `${location.origin}/?id=${instance.pwaInstanceId}`;
-    const manifestObject = {name, shortName, iconSrc, themeColor,
-        backgroundColor, startUrl};
-    const manifestString = manifestCreator.create(manifestObject);
+    const manifestObject = {
+      name: instance.companyName,
+      shortName: instance.companyName,
+      iconSrc: instance.iconImgId,
+      themeColor: instance.colorFgPrimary,
+      backgroundColor: instance.colorBgPrimary,
+      startUrl: `${location.origin}/?id=${instance.pwaInstanceId}`
+    };
     const manifestUrl = URL.createObjectURL(new Blob(
-        [manifestString], {type: 'application/json'}));
+      [manifestCreator.create(manifestObject)], {type: 'application/json'}));
     createManifest(manifestUrl);
   })
   .then(() => {
     return serviceWorkerInstaller.install();
   })
-  .then(serviceWorkerRegistration => {
-    const title = instance.companyName;
-    const options = {
-      body: instance.ctaText.replace(/\+/g, ' '),
-      icon: instance.iconImgId,
-      vibrate: [200, 100, 200, 100, 200, 100, 400],
-      actions: [
-        {action: 'yes', title: 'Yes', icon: './img/yes.png'},
-        {action: 'no', title: 'No', icon: './img/no.png'}
-      ]
-    };
-    const imgs = document.querySelectorAll('img');
-    for (let i = 0, lenI = imgs.length; i < lenI; i++) {
-      let img = imgs[i];
-      img.addEventListener('click', () => {
-        serviceWorkerRegistration.showNotification(title, options);
-      });
-    }
+  .then(serviceWorkerRegistration_ => {
+    serviceWorkerRegistration = serviceWorkerRegistration_;
+    setUpPushNotifications(instance);
   })
   .catch(error => {
     throw error;
