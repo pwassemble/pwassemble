@@ -22,7 +22,7 @@ const STATIC_FILES = [
 const REQUEST_STRATEGIES = new Map();
 REQUEST_STRATEGIES.set(new RegExp(location.host.replace(/\./g, '\\.')), {
   strategy: 'cacheFirst',
-  cache: false
+  cache: true
 });
 REQUEST_STRATEGIES.set(/www\.gstatic\.com/, {
   strategy: 'cacheFirst',
@@ -37,7 +37,7 @@ REQUEST_STRATEGIES.set(/www\.googleapis\.com/, {
   cache: true
 });
 REQUEST_STRATEGIES.set(/firebasestorage\.googleapis\.com/, {
-  strategy: 'networkFirst',
+  strategy: 'cacheFirst',
   cache: true
 });
 
