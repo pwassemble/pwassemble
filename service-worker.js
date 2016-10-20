@@ -10,6 +10,7 @@ const STATIC_FILES = [
   './js/bootstrap.js',
   './js/main.js',
   './js/firebase.js',
+  './js/templates.js',
   './libs/idb-keyval-min.js',
   './libs/url-search-params-min.js',
   './css/main.css',

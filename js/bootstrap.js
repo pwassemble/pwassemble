@@ -5,6 +5,7 @@
 
   const body = document.body;
   const head = document.head;
+  const fragment = document.createDocumentFragment();
 
   // Helper function for push notifications
   const setUpPushNotifications = () => {
@@ -27,36 +28,13 @@
       img.addEventListener('click', showNotification);
     }
   };
-  // Helper functions for creating HTML elements
-  const createElement = (tagName, key, value) => {
-    const elem = document.createElement(tagName);
-    elem.classList.add(key);
-    elem.textContent = value.replace(/\+/g, ' ');
-    body.appendChild(elem);
-  };
-  const createImg = (key, value) => {
-    const elem = document.createElement('img');
-    elem.classList.add([key, 'img--blur']);
-    elem.src = value;
-    body.appendChild(elem);
-  };
-  const createFavicon = value => {
-    const elem = document.createElement('link');
-    elem.rel = 'icon';
-    elem.href = value;
-    head.appendChild(elem);
-  };
-  const createCss = value => {
-    const elem = document.createElement('link');
-    elem.rel = 'stylesheet';
-    elem.href = value;
-    head.appendChild(elem);
-  };
-  const createManifest = value => {
-    const elem = document.createElement('link');
-    elem.rel = 'manifest';
-    elem.href = value;
-    head.appendChild(elem);
+
+  // Helper function to create various link tags for manifest and styles
+  const createLink = (href, rel) => {
+    const link = document.createElement('link');
+    link.rel = rel;
+    link.href = href;
+    return link;
   };
 
   instanceLoader.load()
@@ -65,39 +43,31 @@
     if (!Object.keys(instance).length) {
       return;
     }
-    document.title = instance.companyName;
-    let cssText = [];
+    document.title = `PWAssemble—${instance.companyName}`;
 
+    let cssText = [];
     for (let key in instance) {
       if (!{}.hasOwnProperty.call(instance, key)) {
         continue;
       }
       const value = instance[key];
-      if (key === 'companyName') {
-        createElement('h1', key, value);
-      } else if (key === 'ctaText') {
-        createElement('h2', key, value);
-      } else if (key === 'heroText') {
-        createElement('h3', key, value);
-      } else if (key === 'subText') {
-        createElement('h4', key, value);
-      } else if (key === 'companyLogoImgId') {
-        createImg(key, value);
-      } else if (key === 'heroImgId') {
-        createImg(key, value);
-      } else if (key === 'iconImgId') {
-        createFavicon(value);
+      if (key === 'iconImgId') {
+        head.appendChild(createLink(value, 'icon'));
       } else if ((key === 'colorBgPrimary' || (key === 'colorBgSecondary') ||
                  (key === 'colorFgPrimary') || (key === 'colorFgSecondary'))) {
         cssText.push(`--${key}: ${value};`);
       }
     }
-    // Create CSS
+    // Create global CSS
     if (cssText.length) {
       const cssUrl = URL.createObjectURL(new Blob(
           [`:root {\n${cssText.join('\n  ')}\n}`], {type: 'text/css'}));
-      createCss(cssUrl);
+      head.appendChild(createLink(cssUrl, 'stylesheet'));
     }
+    // Create content
+    const content = templateCreator.create(instance);
+    head.appendChild(content.css);
+    fragment.appendChild(content.html);
     // Create manifest
     const manifestObject = {
       name: instance.companyName,
@@ -109,7 +79,8 @@
     };
     const manifestUrl = URL.createObjectURL(new Blob(
       [manifestCreator.create(manifestObject)], {type: 'application/json'}));
-    createManifest(manifestUrl);
+    head.appendChild(createLink(manifestUrl, 'manifest'));
+    body.appendChild(fragment);
   })
   .then(() => {
     return serviceWorkerInstaller.install();
@@ -121,16 +92,4 @@
   .catch(error => {
     throw error;
   });
-})();
-
-// Simulate slow image loading
-(() => {
-  const imgs = document.querySelectorAll('img');
-  for (let i = 0, lenI = imgs.length; i < lenI; i++) {
-    let img = imgs[i];
-    setTimeout(() => {
-      img.classList.remove('img--blur');
-      img.src = img.dataset.src;
-    }, Math.random() * 3000);
-  }
 })();
