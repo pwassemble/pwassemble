@@ -1,4 +1,4 @@
-/* global instanceLoader, manifestCreator, serviceWorkerInstaller */
+/* global instanceLoader, manifestCreator, serviceWorkerInstaller, templateCreator */
 (() => {
   let instance;
   let serviceWorkerRegistration;

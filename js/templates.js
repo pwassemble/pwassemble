@@ -1,11 +1,9 @@
 window.templateCreator = {
+  /* eslint max-len: ["error", { "ignoreTemplateLiterals": true }] */
   news(instance) {
     return {
-      css: `body {
-        color: white;
-        background-color: red;
-      }`,
-      html: `News template ${instance.companyName} <img src="${instance.companyLogoImgId}">`
+      css: ``,
+      html: ``
     };
   },
   travel(instance) {
