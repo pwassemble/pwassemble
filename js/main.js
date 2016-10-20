@@ -10,13 +10,16 @@ window.serviceWorkerInstaller = {
     if ('serviceWorker' in navigator) {
       return navigator.serviceWorker.register('service-worker.js')
       .then(serviceWorkerRegistration_ => {
-        serviceWorkerRegistration = serviceWorkerRegistration_;
-        if (DEBUG_MODE) {
-          console.log(DEBUG_PREFIX,
-              'Service Worker registered for scope',
-              serviceWorkerRegistration.scope);
-        }
-        return serviceWorkerRegistration;
+        return navigator.serviceWorker.ready
+        .then(function(serviceWorkerRegistration_) {
+          serviceWorkerRegistration = serviceWorkerRegistration_;
+          if (DEBUG_MODE) {
+            console.log(DEBUG_PREFIX,
+                'Service Worker registered for scope',
+                serviceWorkerRegistration.scope);
+          }
+          return serviceWorkerRegistration;
+        });
       })
       .then(() => {
         console.log(DEBUG_PREFIX, 'Registering for sync events');
