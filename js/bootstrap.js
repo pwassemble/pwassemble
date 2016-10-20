@@ -43,7 +43,7 @@
     if (!Object.keys(instance).length) {
       return;
     }
-    document.title = `PWAssemble—${instance.companyName}`;
+    document.title = `PWAssemble—${instance.companyName.replace(/\+/g, ' ')}`;
 
     let cssText = [];
     for (let key in instance) {
@@ -70,8 +70,8 @@
     fragment.appendChild(content.html);
     // Create manifest
     const manifestObject = {
-      name: instance.companyName,
-      shortName: instance.companyName,
+      name: instance.companyName.replace(/\+/g, ' '),
+      shortName: instance.companyName.replace(/\+/g, ' '),
       iconSrc: instance.iconImgId,
       themeColor: instance.colorFgPrimary,
       backgroundColor: instance.colorBgPrimary,
