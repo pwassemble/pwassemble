@@ -52,7 +52,7 @@
       iconSrc: instance.iconImgId,
       themeColor: instance.colorFgPrimary,
       backgroundColor: instance.colorBgPrimary,
-      // Add "pwassemble" for GitHub
+      // Add "pwassemble" for GitHub pages to work
       startUrl: `${location.origin}/pwassemble/?id=${instance.pwaInstanceId}`
     };
     const manifestUrl = URL.createObjectURL(new Blob(
