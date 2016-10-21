@@ -52,7 +52,7 @@
       iconSrc: instance.iconImgId,
       themeColor: instance.colorFgPrimary,
       backgroundColor: instance.colorBgPrimary,
-      startUrl: `${location.href}`
+      startUrl: `${location.origin}/pwassemble/?id=${instance.pwaInstanceId}`
     };
     const manifestUrl = URL.createObjectURL(new Blob(
       [manifestCreator.create(manifestObject)], {type: 'application/json'}));
