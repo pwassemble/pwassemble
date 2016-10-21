@@ -36,17 +36,11 @@ window.serviceWorkerInstaller = {
       })
       .then(() => {
         const endpoint = localStorage.getItem('endpoint');
-        if (localStorage.getItem('endpoint')) {
-          if (DEBUG_MODE) {
-            console.log(DEBUG_PREFIX,
-                'Already subscribed to push notifications at endpoint',
-                endpoint);
-          }
+        if (endpoint) {
           return endpoint;
         }
         if (DEBUG_MODE) {
-          console.log(DEBUG_PREFIX,
-              'Subscribing newly to push notifications at endpoint', endpoint);
+          console.log(DEBUG_PREFIX, 'Subscribing newly to push notifications');
         }
         return serviceWorkerRegistration.pushManager.subscribe({
           userVisibleOnly: true
@@ -56,6 +50,10 @@ window.serviceWorkerInstaller = {
         const endpoint = typeof pushSubscription === 'string' ?
             pushSubscription :
             pushSubscription.endpoint.replace(GCM_API_URL, '');
+        if (DEBUG_MODE) {
+          console.log(DEBUG_PREFIX,
+              'Subscribed to push notifications at endpoint', endpoint);
+        }
         return endpoint;
       })
       .then(endpoint => {

@@ -37,7 +37,7 @@
     return link;
   };
 
-  instanceLoader.load()
+  return instanceLoader.load()
   .then(instance_ => {
     instance = instance_;
     if (!Object.keys(instance).length) {
@@ -45,6 +45,26 @@
     }
     document.title = `PWAssemble—${instance.companyName.replace(/\+/g, ' ')}`;
 
+    // Create manifest
+    const manifestObject = {
+      name: instance.companyName.replace(/\+/g, ' '),
+      shortName: instance.companyName.replace(/\+/g, ' '),
+      iconSrc: instance.iconImgId,
+      themeColor: instance.colorFgPrimary,
+      backgroundColor: instance.colorBgPrimary,
+      startUrl: `${location.origin}/?id=${instance.pwaInstanceId}`
+    };
+    const manifestUrl = URL.createObjectURL(new Blob(
+      [manifestCreator.create(manifestObject)], {type: 'application/json'}));
+    head.appendChild(createLink(manifestUrl, 'manifest'));
+
+    return serviceWorkerInstaller.install();
+  })
+  .then(serviceWorkerRegistration_ => {
+    serviceWorkerRegistration = serviceWorkerRegistration_;
+  })
+  .then(() => {
+    // Create global CSS
     let cssText = [];
     for (let key in instance) {
       if (!{}.hasOwnProperty.call(instance, key)) {
@@ -58,36 +78,21 @@
         cssText.push(`--${key}: ${value};`);
       }
     }
-    // Create global CSS
     if (cssText.length) {
       const cssUrl = URL.createObjectURL(new Blob(
           [`:root {\n${cssText.join('\n  ')}\n}`], {type: 'text/css'}));
       head.appendChild(createLink(cssUrl, 'stylesheet'));
     }
+
     // Create content
     const content = templateCreator.create(instance);
     head.appendChild(content.css);
     fragment.appendChild(content.html);
-    // Create manifest
-    const manifestObject = {
-      name: instance.companyName.replace(/\+/g, ' '),
-      shortName: instance.companyName.replace(/\+/g, ' '),
-      iconSrc: instance.iconImgId,
-      themeColor: instance.colorFgPrimary,
-      backgroundColor: instance.colorBgPrimary,
-      startUrl: `${location.origin}/?id=${instance.pwaInstanceId}`
-    };
-    const manifestUrl = URL.createObjectURL(new Blob(
-      [manifestCreator.create(manifestObject)], {type: 'application/json'}));
-    head.appendChild(createLink(manifestUrl, 'manifest'));
+    body.querySelector('.loading').remove();
     body.appendChild(fragment);
-  })
-  .then(() => {
-    return serviceWorkerInstaller.install();
-  })
-  .then(serviceWorkerRegistration_ => {
-    serviceWorkerRegistration = serviceWorkerRegistration_;
-    setUpPushNotifications(instance);
+
+    // Set up push notifications
+    return setUpPushNotifications(instance);
   })
   .catch(error => {
     throw error;

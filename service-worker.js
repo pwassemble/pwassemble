@@ -6,7 +6,7 @@ const DYNAMIC_CACHE_NAME = 'pwassemble-dynamic-cache-v1';
 const STATIC_FILES = [
   './',
   './index.html',
-  './manifest.js',
+  './js/manifest.js',
   './js/bootstrap.js',
   './js/main.js',
   './js/firebase.js',
@@ -14,7 +14,6 @@ const STATIC_FILES = [
   './libs/idb-keyval-min.js',
   './libs/url-search-params-min.js',
   './css/main.css',
-  './img/fallback.svg',
   './img/yes.png',
   './img/no.png'
 ];
