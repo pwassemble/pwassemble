@@ -52,7 +52,7 @@
       iconSrc: instance.iconImgId,
       themeColor: instance.colorFgPrimary,
       backgroundColor: instance.colorBgPrimary,
-      startUrl: `${location.origin}/?id=${instance.pwaInstanceId}`
+      startUrl: `${location.href}`
     };
     const manifestUrl = URL.createObjectURL(new Blob(
       [manifestCreator.create(manifestObject)], {type: 'application/json'}));
