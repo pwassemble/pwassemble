@@ -68,13 +68,13 @@ nav {
   border: solid 1px var(--colorFgSecondary);
   background-color: var(--colorFgSecondary);
   font-size: 1.25rem;
-  padding: 0 .25rem;
+  padding: 0 .1rem;
 }
 .hamburger-menu {
   background-color: #fff;
   border: none;
   font-size: 1.75rem;
-  padding: 0 .25rem;
+  padding: 0 .1rem;
 }
 .user-menu {
   background-color: #fff;
