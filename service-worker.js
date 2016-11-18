@@ -6,11 +6,11 @@ const DYNAMIC_CACHE_NAME = 'pwassemble-dynamic-cache-v1';
 const STATIC_FILES = [
   './',
   './index.html',
-  './js/manifest.js',
+  './js/manifest-creator.js',
   './js/bootstrap.js',
-  './js/main.js',
-  './js/firebase.js',
-  './js/templates.js',
+  './js/service-worker-installer.js',
+  './js/instance-loader.js',
+  './js/template-loader.js',
   './libs/idb-keyval-min.js',
   './libs/url-search-params-min.js',
   './css/main.css',
@@ -200,9 +200,7 @@ self.addEventListener('activate', activateEvent => {
     }
     return self.clients.claim();
   })
-  .then(() => {
-    return self.clients.matchAll();
-  })
+  .then(() => self.clients.matchAll())
   .then(clients => {
     caches.open(STATIC_CACHE_NAME)
     .then(cache => {

@@ -1,0 +1,101 @@
+body {
+  height: 100vh;
+  width: 100vw;
+}
+h1, h2 {
+  text-align: center;
+}
+body > div {
+  background: rgba(0, 0, 0, 0) url(${instance.heroImgId}) no-repeat scroll 0% 0% / cover padding-box border-box;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+header {
+  background-color: #fff;
+  border-bottom: 1px solid #ccc;
+  box-shadow: 0 2px 5px -2px rgba(0,0,0,0.75);
+  min-height: 4.5rem;
+  display: flex;
+  justify-content: center;
+}
+main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+footer {
+  padding: .25rem;
+  background-color: #000;
+  color: #fff;
+}
+nav {
+  display: flex;
+  margin-top: .5rem;
+  position: absolute;
+  right: .5rem;
+}
+.search-container {
+  background-color: rgba(0, 0, 0, .5);
+  display: flex;
+  justify-content: center;
+  padding: 1.5rem 1rem;
+  width: 100%;
+}
+.text-container {
+  display: flex;
+  color: var(--colorFgSecondary);
+  font-size: 1.3rem;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  text-shadow: #fff 0 0 10px;
+  width: 90%;
+}
+.search-input {
+  border: solid 1px var(--colorFgSecondary);
+  font-size: 1.25rem;
+  padding: .25rem;
+  width: 70%;
+}
+.search-button {
+  border: solid 1px var(--colorFgSecondary);
+  background-color: var(--colorFgSecondary);
+  font-size: 1.25rem;
+}
+.hamburger-menu {
+  background-color: #fff;
+  border: none;
+  font-size: 1.75rem;
+}
+.user-menu {
+  background-color: #fff;
+  border: none;
+  font-size: 2rem;
+}
+.logo {
+  background-color: white;
+  height: 10vh;
+  width: auto;
+}
+.imprint-small {
+  font-size: .75rem;
+}
+.imprint-centered {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  padding: 0;
+  justify-content: space-around;
+}
+.logo-small {
+  height: 5vh;
+  vertical-align: middle;
+  width: auto;
+}

@@ -35,9 +35,7 @@ window.instanceLoader = {
 
         return db.ref(`/instances/${id}`)
         .once('value')
-        .then(snapshot => {
-          return snapshot.val();
-        })
+        .then(snapshot => snapshot.val())
         .then(results => {
           if (!results) {
             return reject(`Could not find instance ${id}`);
@@ -94,16 +92,10 @@ window.instanceLoader = {
           idbKeyval.set(id, finalResults);
           return finalResults;
         })
-        .catch(error => {
-          return reject(error);
-        });
+        .catch(error => reject(error));
       })
-      .then(instance => {
-        return resolve(instance);
-      })
-      .catch(error => {
-        return reject(error);
-      });
+      .then(instance => resolve(instance))
+      .catch(error => reject(error));
     });
   }
 };
