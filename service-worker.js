@@ -13,6 +13,7 @@ const STATIC_FILES = [
   './js/template-loader.js',
   './libs/idb-keyval-min.js',
   './libs/url-search-params-min.js',
+  './libs/whatwg-fetch-min.js',
   './css/main.css',
   './img/yes.png',
   './img/no.png'
