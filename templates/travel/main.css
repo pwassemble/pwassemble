@@ -68,7 +68,6 @@ nav {
   border: solid 1px var(--colorFgSecondary);
   background-color: var(--colorFgSecondary);
   font-size: 1.25rem;
-  padding: 0 .1rem;
 }
 .hamburger-menu {
   background-color: #fff;
@@ -80,6 +79,7 @@ nav {
   background-color: #fff;
   border: none;
   font-size: 2rem;
+  padding: 0 .1rem;
 }
 .logo {
   background-color: white;
