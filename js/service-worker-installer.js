@@ -2,7 +2,7 @@
 window.serviceWorkerInstaller = {
   install() {
     if (!('serviceWorker' in navigator)) {
-      return;
+      return Promise.resolve(false);
     }
     const DEBUG_MODE = true;
     const DEBUG_PREFIX = '🕸';

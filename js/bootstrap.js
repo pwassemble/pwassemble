@@ -36,7 +36,7 @@
     return link;
   };
 
-  return instanceLoader.load()
+  instanceLoader.load()
   .then(instance_ => {
     instance = instance_;
     instance.companyName = instance.companyName.replace(/\+/g, ' ');
@@ -103,7 +103,9 @@
     body.appendChild(fragment);
 
     // Set up push notifications
-    return setUpPushNotifications(instance);
+    if (serviceWorkerRegistration) {
+      setUpPushNotifications(instance);
+    }
   })
   .catch(error => {
     throw error;
