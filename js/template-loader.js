@@ -11,11 +11,10 @@ window.templateLoader = {
         .then(text => eval('`' + text + '`')),
       fetch(`./templates/${instance.template}/main.js`)
         .then(response => response.ok ? response.text() : '')
-        // eslint-disable-next-line no-eval
-        .then(text => eval('`' + text + '`'))
     ])
     .then(results => {
       const html = document.createElement('div');
+      html.id = 'container';
       html.innerHTML = results[0];
       const style = document.createElement('style');
       style.textContent = results[1];

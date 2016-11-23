@@ -96,11 +96,11 @@
     return templateLoader.create(instance);
   })
   .then(content => {
+    fragment.appendChild(content.html);
+    body.appendChild(fragment);
     head.appendChild(content.css);
     head.appendChild(content.js);
-    fragment.appendChild(content.html);
     body.querySelector('.loading').remove();
-    body.appendChild(fragment);
 
     // Set up push notifications
     if (serviceWorkerRegistration) {
