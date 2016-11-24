@@ -4,7 +4,8 @@ const express = require('express');
 const app = express();
 const routes = require('./routes.js');
 
-app.get('/', routes.hello);
+app.use('/', express.static('client'));
+app.get('/hello', routes.hello);
 app.get('/feeds', routes.feeds);
 app.get('/assets', routes.assets);
 
