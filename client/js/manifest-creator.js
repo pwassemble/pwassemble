@@ -1,5 +1,6 @@
 window.manifestCreator = {
   create(manifestObject) {
+    const sizes = [48, 72, 76, 96, 120, 128, 144, 152, 168, 192, 256];
     return JSON.stringify(JSON.parse(`
         {
           "name": "${manifestObject.name}",
@@ -8,11 +9,11 @@ window.manifestCreator = {
           "display": "${manifestObject.display ?
               manifestObject.display : 'standalone'}",
           "icons": [
-            ${manifestObject.icons.map(icon => {
+            ${sizes.map(size => {
               return `{
-                "src": "${icon.src}",
-                "sizes": "${icon.sizes}",
-                "type": "${icon.type}"
+                "src": "${location.origin}/assets?input=${encodeURIComponent(manifestObject.icon)}&width=${size}&height=${size}",
+                "sizes": "${size}x${size}",
+                "type": "image/png"
               }`;
             }).join(',\n')}
           ],

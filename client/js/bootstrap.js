@@ -29,11 +29,21 @@
   };
 
   // Helper function to create various link tags for manifest and styles
-  const createLink = (href, rel) => {
+  const createLink = (rel, href, sizes = false) => {
     const link = document.createElement('link');
     link.rel = rel;
     link.href = href;
+    if (sizes) {
+      link.setAttribute('sizes', `${sizes}x${sizes}`);
+    }
     return link;
+  };
+  // Helper function to create meta tags
+  const createMeta = (name, content) => {
+    const meta = document.createElement('meta');
+    meta.name = name;
+    meta.content = content;
+    return meta;
   };
 
   instanceLoader.load()
@@ -51,20 +61,15 @@
     const manifestObject = {
       name: instance.companyName,
       shortName: instance.companyName,
-      icons: [{
-        src: instance.iconImgId,
-        sizes: '',
-        type: ''
-      }],
+      icon: instance.iconImgId,
       themeColor: instance.colorFgPrimary,
       backgroundColor: instance.colorBgPrimary,
-      // Add "pwassemble" for GitHub pages
-      startUrl: `${location.origin}/pwassemble/?id=${instance.pwaInstanceId}`
+      startUrl: `${location.origin}/?id=${instance.pwaInstanceId}`
     };
     const manifestUrl = URL.createObjectURL(new Blob(
         [manifestCreator.create(manifestObject)],
         {type: 'application/manifest+json'}));
-    head.appendChild(createLink(manifestUrl, 'manifest'));
+    head.appendChild(createLink('manifest', manifestUrl));
 
     return serviceWorkerInstaller.install()
     .then(serviceWorkerRegistration_ => {
@@ -80,7 +85,11 @@
       }
       const value = instance[key];
       if (key === 'iconImgId') {
-        head.appendChild(createLink(value, 'icon'));
+        head.appendChild(createLink('icon', value));
+        ['76', '120', '152'].map(size => {
+          return head.appendChild(createLink('apple-touch-icon',
+              `./assets?input=${value}&width=${size}&height=${size}`, size));
+        });
       } else if ((key === 'colorBgPrimary' || (key === 'colorBgSecondary') ||
                  (key === 'colorFgPrimary') || (key === 'colorFgSecondary'))) {
         cssText.push(`--${key}: ${value};`);
@@ -89,8 +98,10 @@
     if (cssText.length) {
       const cssUrl = URL.createObjectURL(new Blob(
           [`:root {\n  ${cssText.join('\n  ')}\n}`], {type: 'text/css'}));
-      head.appendChild(createLink(cssUrl, 'stylesheet'));
+      head.appendChild(createLink('stylesheet', cssUrl));
     }
+    head.appendChild(createMeta('apple-mobile-web-app-title',
+        instance.companyName));
 
     // Create content
     return templateLoader.create(instance);
