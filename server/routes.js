@@ -15,9 +15,7 @@ const routes = {
     const feedParser = new FeedParser({addmeta: false});
     let items = [];
 
-    feedRequest.on('error', error => {
-      return res.status(500).send(error.toString())
-    });
+    feedRequest.on('error', () => res.sendStatus(500));
     feedRequest.on('response', response => {
       if (response.statusCode !== 200) {
         return feedRequest.emit('error', new Error('Bad status code'));
@@ -25,12 +23,10 @@ const routes = {
       feedRequest.pipe(feedParser);
     });
 
-    feedParser.on('error', error => {
-      return res.status(500).send(error.toString())
-    });
+    feedParser.on('error', () => res.sendStatus(500));
     feedParser.on('readable', () => {
       let item;
-      while (item = feedParser.read()) {
+      while ((item = feedParser.read())) {
         items.push(item);
       }
     });
@@ -38,7 +34,21 @@ const routes = {
   },
 
   assets(req, res) {
-
+    const {input, width, height} = req.query;
+    request(input, {encoding: null}, (error, response, body) => {
+      if (error || response.statusCode !== 200) {
+        return res.sendStatus(500);
+      }
+      sharp(body)
+      .resize(parseInt(width, 10), parseInt(height, 10))
+      .png()
+      .toBuffer()
+      .then(outputBuffer => {
+        res.set('Content-Type', 'image/png');
+        return res.send(outputBuffer);
+      })
+      .catch(() => res.sendStatus(500));
+    });
   }
 };
 
