@@ -6,3 +6,7 @@ article {
 header {
   font-weight: bold;
 }
+
+img, video {
+  max-width: 100%;
+}

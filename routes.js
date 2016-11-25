@@ -49,6 +49,12 @@ const routes = {
       })
       .catch(() => res.sendStatus(500));
     });
+  },
+
+  manifests(req, res) {
+    const base64 = req.query.base64;
+    res.set('Content-Type', 'application/manifest+json');
+    return res.send(new Buffer(base64, 'base64').toString());
   }
 };
 

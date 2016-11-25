@@ -8,6 +8,7 @@ app.use('/', express.static('client'));
 app.get('/hello', routes.hello);
 app.get('/feeds', routes.feeds);
 app.get('/assets', routes.assets);
+app.get('/manifests', routes.manifests);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

@@ -15,11 +15,26 @@ function getFeed(url) {
 function getHtml(entries) {
   return Promise.resolve(
     entries.map(entry => {
+      let videos = [];
       return `
           <article>
             <header>
               <a href="${entry.link}"><h2>${entry.title}</h2></a>
             </header>
+            ${entry.enclosures ?
+                (entry.enclosures.map(enc => {
+                  if (/^image/.test(enc.type)) {
+                    return `<p><img alt="" src="${enc.url}"></p>`;
+                  } else if (/^video/.test(enc.type)) {
+                    videos.push(`<source src="${enc.url}"></source>`);
+                    return '';
+                  }
+                }).join('') + (videos.length ?
+                    `<p><video controls>${videos.join('\n')}</video></p>` :
+                    '')
+                ) :
+                ''
+            }
             ${entry.summary ? `<section><p>${entry.summary}</p></section>` : ''}
             <footer>
               <p>Posted on
@@ -32,7 +47,9 @@ function getHtml(entries) {
     }).join('\n'));
 }
 
-getFeed('http://rss.cnn.com/rss/edition.rss')
+//getFeed('http://rss.cnn.com/rss/edition.rss')
+//getFeed('http://blog.mailchimp.com/feed/')
+getFeed('http://photojournal.jpl.nasa.gov/rss/new')
 .then(entries => getHtml(entries))
 .then(html => document.getElementById('container').innerHTML += html)
 .catch(error => {

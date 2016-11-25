@@ -66,9 +66,8 @@
       backgroundColor: instance.colorBgPrimary,
       startUrl: `${location.origin}/?id=${instance.pwaInstanceId}`
     };
-    const manifestUrl = URL.createObjectURL(new Blob(
-        [manifestCreator.create(manifestObject)],
-        {type: 'application/manifest+json'}));
+    const manifestUrl = `${location.origin}/manifests?base64=${
+        btoa(manifestCreator.create(manifestObject))}`;
     head.appendChild(createLink('manifest', manifestUrl));
 
     return serviceWorkerInstaller.install()
@@ -96,8 +95,9 @@
       }
     }
     if (cssText.length) {
-      const cssUrl = URL.createObjectURL(new Blob(
-          [`:root {\n  ${cssText.join('\n  ')}\n}`], {type: 'text/css'}));
+      const cssUrl = `data:text/css;charset=utf-8;base64,${
+          btoa(`:root {\n  ${cssText.join('\n  ')}\n}`)}`;
+
       head.appendChild(createLink('stylesheet', cssUrl));
     }
     head.appendChild(createMeta('apple-mobile-web-app-title',
