@@ -1,5 +1,6 @@
 window.templateLoader = {
   create(instance) {
+    window.instance = instance;
     return Promise.all([
       fetch(`./templates/${instance.template}/main.html`)
         .then(response => response.ok ? response.text() : '')

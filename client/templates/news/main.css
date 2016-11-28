@@ -1,12 +1,93 @@
+html, body {
+  background-color: var(--colorBgPrimary);
+}
+
+nav {
+  display: flex;
+  position: absolute;
+  right: .5rem;
+  top: .5rem;
+}
+
+#container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  margin: 0;
+  position: relative;
+}
+
+#container > header {
+  background-color: black;
+  border-bottom: solid .5rem var(--colorFgPrimary);
+  color: white;
+  flex-shrink: 0;
+}
+
+#container > main {
+  flex-grow: 1;
+  margin: 0;
+  overflow-y: scroll;
+}
+
+#container > footer {
+  border-top: solid .5rem var(--colorFgPrimary);
+  background-color: black;
+  color: white;
+  flex-shrink: 0;
+}
+
 article {
   background: #eee;
-  margin: .5em;
+  margin: 0 .5rem;
+  padding: .5rem;
+  line-height: 1.5;
+  letter-spacing: 0.01rem;
+  font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-header {
+article header a {
   font-weight: bold;
+  text-decoration: none;
 }
 
-img, video {
-  max-width: 100%;
+article section {
+  font-family: serif;
+}
+
+article section a {
+  color: black;
+}
+
+article img, video, figure, div, p, a, iframe {
+  max-width: 100% !important;
+}
+
+article footer {
+  border-top: 1px solid var(--colorFgPrimary);
+  font-size: .75rem;
+}
+
+.hamburger-menu {
+  background-color: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: lighter;
+  padding: 0 .1rem;
+}
+
+.logo {
+  background-color: white;
+  height: 10vh;
+  width: auto;
+}
+
+.logo-small {
+  height: 5vh;
+  vertical-align: middle;
+  width: auto;
 }

@@ -12,7 +12,10 @@ const routes = {
   feeds(req, res) {
     const url = req.query.url;
     const feedRequest = request(url);
-    const feedParser = new FeedParser({addmeta: false});
+    const feedParser = new FeedParser({
+      addmeta: true,
+      normalize: true
+    });
     let items = [];
 
     feedRequest.on('error', () => res.sendStatus(500));
