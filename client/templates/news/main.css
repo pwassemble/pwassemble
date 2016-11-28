@@ -6,7 +6,7 @@ html, body {
 nav {
   display: flex;
   position: absolute;
-  right: .5rem;
+  left: .5rem;
   top: .5rem;
 }
 
@@ -23,6 +23,8 @@ nav {
   border-bottom: solid .5rem var(--colorFgPrimary);
   color: white;
   flex-shrink: 0;
+  margin-bottom: -1rem;
+  text-align: center;
 }
 
 #container > header > h2 {
@@ -87,7 +89,7 @@ article footer {
 }
 
 .logo {
-  height: 10vh;
+  height: 7.5vh;
   width: auto;
 }
 

@@ -18,7 +18,7 @@ function getHtml(entries) {
       <img class="logo" alt="${instance.companyName} logo"
           src="${instance.companyLogoImgId}">
       <nav>
-        <button class="hamburger-menu">Menu ☰</button>
+        <button class="hamburger-menu">☰</button>
       </nav>
     </header>
     <main>${
