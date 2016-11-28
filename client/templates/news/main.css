@@ -43,6 +43,7 @@ nav {
   background-color: black;
   color: white;
   flex-shrink: 0;
+  font-size: .75rem;
 }
 
 article {
