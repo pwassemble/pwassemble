@@ -73,7 +73,7 @@ function getHtml(entries) {
 //getFeed('http://www.herzdamengeschichten.de/feed/')
 //getFeed('https://theintercept.com/feed/?rss')
 //getFeed('http://feeds.washingtonpost.com/rss/politics')
-getFeed('http://www.nytimes.com/services/xml/rss/nyt/HomePage.xml')
+getFeed(instance.rssFeed)
 //getFeed('http://www.tagesschau.de/xml/rss2')
 .then(entries => getHtml(entries))
 .then(html => document.getElementById('container').innerHTML += html)

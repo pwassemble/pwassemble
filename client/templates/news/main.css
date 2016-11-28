@@ -1,5 +1,6 @@
 html, body {
-  background-color: var(--colorBgPrimary);
+  background-color: black;
+  font-size: 14pt;
 }
 
 nav {
@@ -24,6 +25,10 @@ nav {
   flex-shrink: 0;
 }
 
+#container > header > h2 {
+  font-size: 1.25rem;
+}
+
 #container > main {
   flex-grow: 1;
   margin: 0;
@@ -39,7 +44,7 @@ nav {
 
 article {
   background: #eee;
-  margin: 0 .5rem;
+  margin: .5rem;
   padding: .5rem;
   line-height: 1.5;
   letter-spacing: 0.01rem;
@@ -81,7 +86,6 @@ article footer {
 }
 
 .logo {
-  background-color: white;
   height: 10vh;
   width: auto;
 }
