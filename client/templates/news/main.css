@@ -33,6 +33,7 @@ nav {
   flex-grow: 1;
   margin: 0;
   overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 
 #container > footer {

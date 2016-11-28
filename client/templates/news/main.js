@@ -68,13 +68,7 @@ function getHtml(entries) {
     </footer>`);
 }
 
-//getFeed('http://rss.cnn.com/rss/edition.rss')
-//getFeed('http://blog.mailchimp.com/feed/')
-//getFeed('http://www.herzdamengeschichten.de/feed/')
-//getFeed('https://theintercept.com/feed/?rss')
-//getFeed('http://feeds.washingtonpost.com/rss/politics')
 getFeed(instance.rssFeed)
-//getFeed('http://www.tagesschau.de/xml/rss2')
 .then(entries => getHtml(entries))
 .then(html => document.getElementById('container').innerHTML += html)
 .catch(error => {
