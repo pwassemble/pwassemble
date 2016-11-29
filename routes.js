@@ -11,7 +11,10 @@ const routes = {
 
   feeds(req, res) {
     const url = req.query.url;
-    const feedRequest = request(url);
+    const feedRequest = request({
+      url: url,
+      gzip: true
+    });
     const feedParser = new FeedParser({
       addmeta: true,
       normalize: true
@@ -38,7 +41,10 @@ const routes = {
 
   assets(req, res) {
     const {input, width, height} = req.query;
-    request(input, {encoding: null}, (error, response, body) => {
+    request(input, {
+      encoding: null,
+      gzip: true
+    }, (error, response, body) => {
       if (error || response.statusCode !== 200) {
         return res.sendStatus(500);
       }
@@ -56,10 +62,18 @@ const routes = {
 
   proxy(req, res) {
     const url = req.query.url;
-    request(url, {encoding: null}, (error, response, body) => {
+    request(url, {
+      gzip: true,
+      encoding: null
+    }, (error, response, body) => {
       if (error || response.statusCode !== 200) {
         return res.sendStatus(404);
       }
+      res.set({
+        'Content-Type': response.headers['content-type'],
+        'Cache-Control': response.headers['cache-control'] ?
+            response.headers['cache-control'] : 'max-age=3600'
+      });
       return res.send(body);
     });
   },

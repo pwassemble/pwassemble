@@ -5,7 +5,7 @@ const express = require('express');
 const app = express();
 const routes = require('./routes.js');
 
-app.use(compression());
+app.use(compression({threshold: 0}));
 
 app.use('/', express.static('client'));
 

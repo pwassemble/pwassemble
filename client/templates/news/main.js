@@ -6,7 +6,8 @@ function getFeed(url) {
     }
     return response.text()
     // Rewrite non-http links and proxy them locally
-    .then(raw => JSON.parse(raw.replace(/http:\/\//g, './proxy?url=http://')));
+    .then(raw => JSON.parse(raw.replace(/src=(\\["'])http:\/\//g,
+        'src=$1./proxy?url=http://')));
   })
   .catch(fetchError => {
     throw fetchError;
@@ -14,6 +15,8 @@ function getFeed(url) {
 }
 
 function getHtml(entries) {
+  const proxyHttps = url => /http:\/\//.test(url) ?
+      `./proxy?url=${encodeURIComponent(enc.url)}` : url;
   return Promise.resolve(`
       ${entries.map(entry => {
         let videos = [];
@@ -26,9 +29,10 @@ function getHtml(entries) {
               ${entry.enclosures.length ?
                   (entry.enclosures.map(enc => {
                     if (/^image/.test(enc.type)) {
-                      return `<p><img alt="" src="${enc.url}"></p>`;
+                      return `<p><img alt="" src="${proxyHttps(enc.url)}"></p>`;
                     } else if (/^video/.test(enc.type)) {
-                      videos.push(`<source src="${enc.url}"></source>`);
+                      videos.push(
+                          `<source src="${proxyHttps(enc.url)}"></source>`);
                       return '';
                     }
                   }).join('') + (videos.length ?
@@ -37,7 +41,7 @@ function getHtml(entries) {
                   ) :
                   ''}
               ${entry.image && entry.image.url ?
-                  `<p><img alt="" src="${entry.image.url}"></p>` :
+                  `<p><img alt="" src="${proxyHttps(entry.image.url)}"></p>` :
                   ''}
               ${entry.description ?
                   `<section>${entry.description}</section>` :
