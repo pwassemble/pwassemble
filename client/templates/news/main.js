@@ -25,7 +25,8 @@ function getHtml(entries) {
       entries.map(entry => {
         let videos = [];
         return `
-            <article>
+            <article ${entry.meta.language ?
+                  `lang="${entry.meta.language}"` : ''}>
               <header>
                 <a href="${entry.link}"><h2>${entry.title}</h2></a>
               </header>

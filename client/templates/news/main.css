@@ -11,6 +11,7 @@ nav {
 }
 
 #container {
+  background: rgba(0, 0, 0, 0) url(${instance.heroImgId}) no-repeat scroll 0% 0% / cover padding-box border-box;
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -25,10 +26,6 @@ nav {
   flex-shrink: 0;
   margin-bottom: -1rem;
   text-align: center;
-}
-
-#container > header > h2 {
-  font-size: 1.25rem;
 }
 
 #container > main {
@@ -47,8 +44,11 @@ nav {
 }
 
 article {
-  background: #eee;
+  background: rgba(255, 255, 255, .95);
   margin: .5rem;
+  hypens: auto;
+  -webkit-hypens: auto;
+  -moz-hypens: auto;
   padding: .5rem;
   line-height: 1.5;
   letter-spacing: 0.01rem;
