@@ -54,6 +54,16 @@ const routes = {
     });
   },
 
+  proxy(req, res) {
+    const url = req.query.url;
+    request(url, {encoding: null}, (error, response, body) => {
+      if (error || response.statusCode !== 200) {
+        return res.sendStatus(404);
+      }
+      return res.send(body);
+    });
+  },
+
   manifests(req, res) {
     const base64 = req.query.base64;
     res.set('Content-Type', 'application/manifest+json');

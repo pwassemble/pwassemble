@@ -1,11 +1,12 @@
 function getFeed(url) {
   return fetch(`./feeds?url=${encodeURIComponent(url)}`)
   .then(response => {
-    if (response.ok) {
-      return response.json();
+    if (!response.ok) {
+      return Response.error();
     }
-    console.log('💩 other');
-    return Response.error();
+    return response.text()
+    // Rewrite non-http links and proxy them locally
+    .then(raw => JSON.parse(raw.replace(/http:\/\//g, './proxy?url=http://')));
   })
   .catch(fetchError => {
     throw fetchError;
