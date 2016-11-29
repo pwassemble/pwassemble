@@ -108,8 +108,8 @@
   })
   .then(content => {
     fragment.appendChild(content.html);
-    body.appendChild(fragment);
     head.appendChild(content.css);
+    body.appendChild(fragment);
     head.appendChild(content.js);
     body.querySelector('.loading').remove();
 

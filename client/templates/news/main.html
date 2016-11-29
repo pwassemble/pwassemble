@@ -1,0 +1,75 @@
+<header>
+  <img class="logo" alt="${instance.companyName} logo"
+      src="${instance.companyLogoImgId}">
+  <nav>
+    <button class="hamburger-menu">☰</button>
+  </nav>
+</header>
+<main>
+  ${entries = ((items, entries = [], chars = '⠁⠂⠃⠄⠅⠆⠇⠈⠉⠊⠋⠌⠍⠎⠏⠐⠑⠒⠓⠔⠕⠖⠗⠘⠙⠚⠛⠜⠝⠞⠟⠠⠡⠢⠣⠤⠥⠦⠧⠨⠩⠪⠫⠬⠭⠮⠯⠰⠱⠲⠳⠴⠵⠶⠷⠸⠹⠺⠻⠼⠽⠾⠿⡀⡁⡂⡃⡄⡅⡆⡇⡈⡉⡊⡋⡌⡍⡎⡏⡐⡑⡒⡓⡔⡕⡖⡗⡘⡙⡚⡛⡜⡝⡞⡟⡠⡡⡢⡣⡤⡥⡦⡧⡨⡩⡪⡫⡬⡭⡮⡯⡰⡱⡲⡳⡴⡵⡶⡷⡸⡹⡺⡻⡼⡽⡾⡿⢀⢁⢂⢃⢄⢅⢆⢇⢈⢉⢊⢋⢌⢍⢎⢏⢐⢑⢒⢓⢔⢕⢖⢗⢘⢙⢚⢛⢜⢝⢞⢟⢠⢡⢢⢣⢤⢥⢦⢧⢨⢩⢪⢫⢬⢭⢮⢯⢰⢱⢲⢳⢴⢵⢶⢷⢸⢹⢺⢻⢼⢽⢾⢿⣀⣁⣂⣃⣄⣅⣆⣇⣈⣉⣊⣋⣌⣍⣎⣏⣐⣑⣒⣓⣔⣕⣖⣗⣘⣙⣚⣛⣜⣝⣞⣟⣠⣡⣢⣣⣤⣥⣦⣧⣨⣩⣪⣫⣬⣭⣮⣯⣰⣱⣲⣳⣴⣵⣶⣷⣸⣹⣺⣻⣼⣽⣾⣿') => {
+    const rand = (from, to) => Math.floor(Math.random() * to) + from;
+    const getWord = (min, max, word = '') => {
+      for (let i = 0, count = rand(min, max); i < count; i++) {
+        word += chars[rand(0, chars.length)];
+      }
+      return word;
+    };
+    const getWords = (minW, maxW, minL, maxL, words = []) => {
+      for (let i = 0, count = rand(minW, maxW); i < count; i++) {
+        words[i] = getWord(minL, maxL);
+      }
+      return words.join(' ');
+    };
+    for (let i = 0; i < items; i++) {
+      entries[i] = {
+        title: getWords(2, 4, 2, 5),
+        summary: getWords(10, 15, 2, 8),
+        date: new Date().toISOString()
+      };
+    }
+    return entries;
+  })(5), entries.map(entry => {
+  let videos = [];
+  return `
+      <article ${entry.meta && entry.meta.language ?
+            `lang="${entry.meta.language}"` : ''}>
+        <header>
+          <a href="${entry.link}"><h2>${entry.title}</h2></a>
+        </header>
+        ${entry.enclosures && entry.enclosures.length ?
+            (entry.enclosures.map(enc => {
+              if (/^image/.test(enc.type)) {
+                return `<p><img alt="" src="${enc.url}"></p>`;
+              } else if (/^video/.test(enc.type)) {
+                videos.push(`<source src="${enc.url}"></source>`);
+                return '';
+              }
+            }).join('') + (videos.length ?
+                `<p><video controls>${videos.join('\n')}</video></p>` :
+                '')
+            ) :
+            ''}
+        ${entry.image && entry.image.url ?
+            `<p><img alt="" src="${entry.image.url}"></p>` :
+            ''}
+        ${entry.description ?
+            `<section>${entry.description}</section>` :
+            (entry.summary ?
+                `<section>${entry.summary}</section>` :
+                '')}
+        <footer>
+          <p>Posted on
+            <time datetime="${new Date(entry.date).toISOString()}">
+              ${new Date(entry.date).toLocaleString()}
+            </time>
+            ${entry.author ? `by ${entry.author}` : ''}
+          </p>
+        </footer>
+      </article>`;
+  }).join('\n')}
+</main>
+<footer>
+  &copy; ${new Date().getFullYear()} ${instance.companyName}
+  <img class="logo-small" alt="${instance.companyName} logo"
+      src="${instance.companyLogoImgId}">
+</footer>

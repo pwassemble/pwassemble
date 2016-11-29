@@ -1,6 +1,6 @@
 window.manifestCreator = {
   create(manifestObject) {
-    const sizes = [48, 72, 76, 96, 120, 128, 144, 152, 168, 192, 256];
+    const sizes = [48, 72, 76, 96, 120, 128, 144, 152, 168, 192, 256, 512];
     return JSON.stringify(JSON.parse(`
         {
           "name": "${manifestObject.name}",

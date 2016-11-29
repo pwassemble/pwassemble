@@ -14,15 +14,7 @@ function getFeed(url) {
 
 function getHtml(entries) {
   return Promise.resolve(`
-    <header>
-      <img class="logo" alt="${instance.companyName} logo"
-          src="${instance.companyLogoImgId}">
-      <nav>
-        <button class="hamburger-menu">☰</button>
-      </nav>
-    </header>
-    <main>${
-      entries.map(entry => {
+      ${entries.map(entry => {
         let videos = [];
         return `
             <article ${entry.meta.language ?
@@ -60,18 +52,12 @@ function getHtml(entries) {
                 </p>
               </footer>
             </article>`;
-      }).join('\n')}
-    </main>
-    <footer>
-      <img class="logo-small" alt="${instance.companyName} logo"
-          src="${instance.companyLogoImgId}">
-      &copy; ${new Date().getFullYear()} ${instance.companyName}
-    </footer>`);
+      }).join('\n')}`);
 }
 
 getFeed(instance.rssFeed)
 .then(entries => getHtml(entries))
-.then(html => document.getElementById('container').innerHTML += html)
+.then(html => document.querySelector('#container').querySelector('main').innerHTML = html)
 .catch(error => {
   console.log(error);
 });
