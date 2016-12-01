@@ -4,6 +4,9 @@ const compression = require('compression');
 const express = require('express');
 const app = express();
 const routes = require('./routes.js');
+const minify = require('./minify.js');
+
+minify.minifyAll();
 
 app.use(compression({threshold: 0}));
 
