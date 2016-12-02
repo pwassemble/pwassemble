@@ -1,5 +1,4 @@
 node_modules
 client/dist
 *.log
-*.lock
 .DS_Store
