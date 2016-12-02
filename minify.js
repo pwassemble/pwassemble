@@ -19,7 +19,7 @@ const ls = start => {
   });
 };
 
-const minifyHtml = (code, destFile) => {
+const minifyHtml = (code, destFile, returnHtml = false) => {
   const result = htmlMinifier(code, {
     collapseBooleanAttributes: true,
     collapseInlineTagWhitespace: true,
@@ -37,6 +37,9 @@ const minifyHtml = (code, destFile) => {
     trimCustomFragments: true,
     useShortDoctype: true
   });
+  if (returnHtml) {
+    return {result, destFile};
+  }
   fs.writeFileSync(destFile, result);
 };
 
@@ -53,9 +56,9 @@ const minifyJs = (code, destFile) => {
   }
 };
 
-const minifyCss = (code, file, destFile) => {
+const minifyCss = (code, file, destFile, returnCss = false) => {
   const processor = postcss([require('autoprefixer'), require('cssnano')]);
-  processor.process(code, {
+  return processor.process(code, {
     from: file,
     to: destFile,
     discardComments: {
@@ -64,6 +67,9 @@ const minifyCss = (code, file, destFile) => {
     map: CREATE_SOURCE_MAPS ? {inline: false} : false
   })
   .then(result => {
+    if (returnCss) {
+      return result.css;
+    }
     fs.writeFileSync(destFile, result.css);
     if (CREATE_SOURCE_MAPS) {
       fs.writeFileSync(`${destFile}.map`, JSON.stringify(result.map, null, 2));
@@ -130,6 +136,7 @@ const minify = {
       results.push(rootFiles);
       let jsFiles = [];
       let cssFiles = [];
+      let indexHtml;
       results.forEach(directory => {
         directory.forEach(file => {
           const extension = path.extname(file);
@@ -151,7 +158,8 @@ const minify = {
           } else if (/\.css$/.test(file)) {
             cssFiles.push(file);
           } else if (/\.html$/.test(file)) {
-            minifyHtml(fs.readFileSync(file, {encoding: 'utf8'}), destFile);
+            indexHtml = minifyHtml(fs.readFileSync(file, {encoding: 'utf8'}),
+                destFile, true);
           }
         });
       });
@@ -164,8 +172,17 @@ const minify = {
       let cssCodes = [];
       cssFiles.map(file => cssCodes.push(
           fs.readFileSync(file, {encoding: 'utf8'})));
-      minifyCss(cssCodes.join('\n'), path.join(distDir, 'css', 'bundle.css'),
-          path.join(distDir, 'css', 'bundle-min.css'));
+      // Inline bundled CSS
+      minifyCss(cssCodes.join('\n'),
+          path.join(distDir, 'css', 'bundle.css'),
+          path.join(distDir, 'css', 'bundle-min.css'), true)
+      .then(css => {
+        const html = indexHtml.result.replace(/<style>.*?<\/style>/,
+            `<style>${css}</style>`);
+        fs.writeFileSync(indexHtml.destFile, html);
+      });
+      fs.createReadStream(path.join(__dirname, 'client', 'favicon.ico'))
+          .pipe(fs.createWriteStream(path.join(distDir, 'favicon.ico')));
     })
     .catch(error => {
       throw error;
