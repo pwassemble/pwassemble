@@ -7,7 +7,6 @@ const STATIC_FILES = [
   './',
   './index.html',
   './js/bundle-min.js',
-  './css/bundle-min.css',
   './static/yes.png',
   './static/no.png'
 ];
