@@ -1,5 +1,5 @@
 /* global instanceLoader, manifestCreator, serviceWorkerInstaller, templateLoader */
-(() => {
+window.init = () => {
   let instance;
   let serviceWorkerRegistration;
 
@@ -121,4 +121,4 @@
   .catch(error => {
     throw error;
   });
-})();
+};

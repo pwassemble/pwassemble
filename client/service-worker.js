@@ -6,17 +6,10 @@ const DYNAMIC_CACHE_NAME = 'pwassemble-dynamic-cache-v1';
 const STATIC_FILES = [
   './',
   './index.html',
-  './js/manifest-creator.js',
-  './js/bootstrap.js',
-  './js/service-worker-installer.js',
-  './js/instance-loader.js',
-  './js/template-loader.js',
-  './libs/idb-keyval-min.js',
-  './libs/url-search-params-min.js',
-  './libs/whatwg-fetch-min.js',
-  './css/main.css',
-  './img/yes.png',
-  './img/no.png'
+  './js/bundle-min.js',
+  './css/bundle-min.css',
+  './static/yes.png',
+  './static/no.png'
 ];
 
 const REQUEST_STRATEGIES = new Map();

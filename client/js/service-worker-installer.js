@@ -10,7 +10,7 @@ window.serviceWorkerInstaller = {
 
     // Register the Service Worker
     let serviceWorkerRegistration;
-    return navigator.serviceWorker.register('service-worker.js')
+    return navigator.serviceWorker.register('service-worker-min.js')
     .then(serviceWorkerRegistration_ => {
       return navigator.serviceWorker.ready
       .then(function(serviceWorkerRegistration_) {

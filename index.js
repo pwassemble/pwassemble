@@ -6,11 +6,13 @@ const app = express();
 const routes = require('./routes.js');
 const minify = require('./minify.js');
 
-minify.minifyAll();
+minify.minifyTemplates();
+minify.minifyStatic();
 
 app.use(compression({threshold: 0}));
 
-app.use('/', express.static('client'));
+app.use('/', express.static('client/dist'));
+app.use('/static', express.static('client/static'));
 
 app.get('/hello', routes.hello);
 app.get('/feeds', routes.feeds);

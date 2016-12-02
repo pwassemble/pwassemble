@@ -1,3 +1,5 @@
+/* global instance */
+/* eslint "require-jsdoc": 0 */
 function getFeed(url) {
   return fetch(`./feeds?url=${encodeURIComponent(url)}`)
   .then(response => {
@@ -6,8 +8,8 @@ function getFeed(url) {
     }
     return response.text()
     // Rewrite non-http links and proxy them locally
-    .then(raw => JSON.parse(raw.replace(/src=(\\["'])http:\/\//g,
-        'src=$1./proxy?url=http://')));
+    .then(raw => JSON.parse(raw.replace(/src=(\\["'])(http:\/\/.*?)(?:\\["'])/g,
+        (_, p1, p2) => `src=${p1}./proxy?url=${encodeURIComponent(p2)}${p1}`)));
   })
   .catch(fetchError => {
     throw fetchError;
@@ -15,14 +17,16 @@ function getFeed(url) {
 }
 
 function getHtml(entries) {
-  const proxyHttps = url => /http:\/\//.test(url) ?
-      `./proxy?url=${encodeURIComponent(enc.url)}` : url;
+  // Helper function to proxy unsecure HTTP URLs over HTTPS
+  const proxyHttps = url => /^http:\/\//.test(url) ?
+      `./proxy?url=${encodeURIComponent(url)}` : url;
+
   return Promise.resolve(`
       ${entries.map(entry => {
         let videos = [];
         return `
             <article ${entry.meta.language ?
-                  `lang="${entry.meta.language}"` : ''}>
+                `lang="${entry.meta.language}"` : ''}>
               <header>
                 <a href="${entry.link}"><h2>${entry.title}</h2></a>
               </header>
@@ -33,8 +37,8 @@ function getHtml(entries) {
                     } else if (/^video/.test(enc.type)) {
                       videos.push(
                           `<source src="${proxyHttps(enc.url)}"></source>`);
-                      return '';
                     }
+                    return 0;
                   }).join('') + (videos.length ?
                       `<p><video controls>${videos.join('\n')}</video></p>` :
                       '')
@@ -43,7 +47,7 @@ function getHtml(entries) {
               ${entry.image && entry.image.url ?
                   `<p><img alt="" src="${proxyHttps(entry.image.url)}"></p>` :
                   ''}
-              ${entry.description ?
+              ${entry.description ? // eslint-disable-line no-nested-ternary
                   `<section>${entry.description}</section>` :
                   (entry.summary ?
                       `<section>${entry.summary}</section>` :
@@ -62,7 +66,9 @@ function getHtml(entries) {
 
 getFeed(instance.rssFeed)
 .then(entries => getHtml(entries))
-.then(html => document.querySelector('#container').querySelector('main').innerHTML = html)
+.then(html => {
+  document.querySelector('#container').querySelector('main').innerHTML = html;
+})
 .catch(error => {
   console.log(error);
 });

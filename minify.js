@@ -19,8 +19,8 @@ const ls = start => {
   });
 };
 
-const minifyHtml = (file, destFile) => {
-  const result = htmlMinifier(fs.readFileSync(file, {encoding: 'utf8'}), {
+const minifyHtml = (code, destFile) => {
+  const result = htmlMinifier(code, {
     collapseBooleanAttributes: true,
     collapseInlineTagWhitespace: true,
     collapseWhitespace: true,
@@ -40,8 +40,8 @@ const minifyHtml = (file, destFile) => {
   fs.writeFileSync(destFile, result);
 };
 
-const minifyJavaScript = (file, destFile) => {
-  const result = babel.transformFileSync(file, {
+const minifyJs = (code, destFile) => {
+  const result = babel.transform(code, {
     sourceMaps: CREATE_SOURCE_MAPS,
     presets: ['babili'],
     comments: false,
@@ -53,14 +53,15 @@ const minifyJavaScript = (file, destFile) => {
   }
 };
 
-const minifyCss = (file, destFile) => {
+const minifyCss = (code, file, destFile) => {
   const processor = postcss([require('autoprefixer'), require('cssnano')]);
-  processor.process(fs.readFileSync(file), {
+  processor.process(code, {
     from: file,
     to: destFile,
-    map: {
-      inline: false
-    }
+    discardComments: {
+      removeAll: true
+    },
+    map: CREATE_SOURCE_MAPS ? {inline: false} : false
   })
   .then(result => {
     fs.writeFileSync(destFile, result.css);
@@ -71,7 +72,7 @@ const minifyCss = (file, destFile) => {
 };
 
 const minify = {
-  minifyAll() {
+  minifyTemplates() {
     const templatesDir = path.join(__dirname, 'client', 'templates');
     const distDir = path.join(__dirname, 'client', 'dist');
     if (!fs.existsSync(distDir)) {
@@ -90,14 +91,81 @@ const minify = {
             fs.mkdirSync(destDir);
           }
           if (/\.js$/.test(file)) {
-            minifyJavaScript(file, destFile);
+            minifyJs(fs.readFileSync(file, {encoding: 'utf8'}), destFile);
           } else if (/\.css$/.test(file)) {
-            minifyCss(file, destFile);
+            minifyCss(fs.readFileSync(file, {encoding: 'utf8'}), file,
+                destFile);
           } else if (/\.html$/.test(file)) {
-            minifyHtml(file, destFile);
+            minifyHtml(fs.readFileSync(file, {encoding: 'utf8'}), destFile);
           }
         });
       });
+    })
+    .catch(error => {
+      throw error;
+    });
+  },
+
+  minifyStatic() {
+    const staticDir = path.join(__dirname, 'client');
+    const distDir = path.join(__dirname, 'client', 'dist');
+    if (!fs.existsSync(distDir)) {
+      fs.mkdirSync(distDir);
+    }
+    let rootFiles = [];
+    ls(staticDir)
+    .then(files => {
+      let directories = files.filter(file => {
+        if (fs.lstatSync(file).isDirectory() && /css|js|libs$/.test(file)) {
+          return true;
+        }
+        if (!fs.lstatSync(file).isDirectory()) {
+          rootFiles.push(file);
+        }
+        return false;
+      });
+      return Promise.all(directories.map(file => ls(file)));
+    })
+    .then(results => {
+      results.push(rootFiles);
+      let jsFiles = [];
+      let cssFiles = [];
+      results.forEach(directory => {
+        directory.forEach(file => {
+          const extension = path.extname(file);
+          // All destination files should have a -min. suffix, except index.html
+          const destFile = file.replace('client/', 'client/dist/')
+              .replace(extension, (extension === '.html' ?
+              extension : `-min${extension}`));
+          const destDir = path.dirname(destFile);
+          if (!/libs$/.test(destDir) && !fs.existsSync(destDir)) {
+            fs.mkdirSync(destDir);
+          }
+          if (/\.js$/.test(file)) {
+            // Do not bundle the service-worker.js file
+            if (/service-worker\.js$/.test(file)) {
+              minifyJs(fs.readFileSync(file, {encoding: 'utf8'}), destFile);
+            } else {
+              jsFiles.push(file);
+            }
+          } else if (/\.css$/.test(file)) {
+            cssFiles.push(file);
+          } else if (/\.html$/.test(file)) {
+            minifyHtml(fs.readFileSync(file, {encoding: 'utf8'}), destFile);
+          }
+        });
+      });
+      // Bundle all JavaScript
+      let jsCodes = [];
+      jsFiles.map(file => jsCodes.push(
+          fs.readFileSync(file, {encoding: 'utf8'})));
+      minifyJs(jsCodes.join('\n'), path.join(distDir, 'js', 'bundle-min.js'));
+      // Bundle all CSS
+      let cssCodes = [];
+      cssFiles.map(file => cssCodes.push(
+          fs.readFileSync(file, {encoding: 'utf8'})));
+      minifyCss(cssCodes.join('\n'), path.join(distDir, 'css', 'bundle.css'),
+          path.join(distDir, 'css', 'bundle-min.css'));
     })
     .catch(error => {
       throw error;
