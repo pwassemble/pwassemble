@@ -6,14 +6,29 @@ const DYNAMIC_CACHE_NAME = 'pwassemble-dynamic-cache-v1';
 const STATIC_FILES = [
   './',
   './index.html',
+  './favicon.ico',
   './js/bundle-min.js',
   './static/yes.png',
-  './static/no.png'
+  './static/no.png',
+  './static/offline.svg'
 ];
 
 const REQUEST_STRATEGIES = new Map();
-REQUEST_STRATEGIES.set(new RegExp(location.host.replace(/\./g, '\\.')), {
+const HOST = location.host.replace(/\./g, '\\.');
+REQUEST_STRATEGIES.set(new RegExp(`${HOST}/(?:news|travel)`), {
   strategy: 'cacheFirst',
+  cache: true
+});
+REQUEST_STRATEGIES.set(new RegExp(`${HOST}/(?:js|static)`), {
+  strategy: 'cacheFirst',
+  cache: false
+});
+REQUEST_STRATEGIES.set(new RegExp(`${HOST}/proxy`), {
+  strategy: 'networkFirst',
+  cache: false
+});
+REQUEST_STRATEGIES.set(new RegExp(`${HOST}/\\w+`), {
+  strategy: 'networkFirst',
   cache: true
 });
 REQUEST_STRATEGIES.set(/www\.gstatic\.com/, {
