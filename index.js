@@ -14,6 +14,16 @@ optimize.optimizeStatic();
 
 app.use(compression({threshold: 0}));
 
+/* Enforce HTTPS on Heroku */
+app.get('*', (req, res, next) => {
+  const forwardedProtoHeader = req.headers['x-forwarded-proto'];
+  if (forwardedProtoHeader && forwardedProtoHeader !== 'https') {
+    res.redirect(`https://${req.host}${req.url}`);
+  } else {
+    next();
+  }
+});
+
 app.use('/', express.static('client/dist'));
 app.use('/static', express.static('client/static'));
 
