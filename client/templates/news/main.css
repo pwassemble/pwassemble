@@ -44,15 +44,11 @@ article {
   background: rgba(255, 255, 255, .95);
   margin: .5rem;
   hypens: auto;
-  -webkit-hypens: auto;
-  -moz-hypens: auto;
   padding: .5rem;
   line-height: 1.5;
   letter-spacing: 0.01rem;
   font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 @media (max-width: 500px) {

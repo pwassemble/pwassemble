@@ -22,10 +22,6 @@ h2 {
   color: var(--colorFgSecondary);
 }
 
-img.offline {
-  max-width: 20vw;
-}
-
 .loading {
   font-size: 2rem;
   display: inline-block;
