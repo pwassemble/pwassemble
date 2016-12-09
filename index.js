@@ -5,9 +5,12 @@ const express = require('express');
 const app = express();
 const routes = require('./routes.js');
 const minify = require('./minify.js');
+const optimize = require('./optimize');
 
 minify.minifyTemplates();
 minify.minifyStatic();
+
+optimize.optimizeStatic();
 
 app.use(compression({threshold: 0}));
 

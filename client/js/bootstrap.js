@@ -1,13 +1,4 @@
 /* global instanceLoader, manifestCreator, serviceWorkerInstaller, templateLoader */
-window.addEventListener('error', errorEvent => {
-  const target = errorEvent.target;
-  console.log(target)
-  if (target.nodeName === 'img') {
-    target.classList.add('offline');
-    target.src = './static/offline.svg';
-  }
-});
-
 window.init = () => {
   let instance;
   let serviceWorkerRegistration;

@@ -1,4 +1,5 @@
 const fs = require('fs');
+const fse = require('fs-extra');
 const path = require('path');
 const babel = require("babel-core");
 const postcss = require('postcss');
@@ -81,14 +82,22 @@ const minify = {
   minifyTemplates() {
     const templatesDir = path.join(__dirname, 'client', 'templates');
     const distDir = path.join(__dirname, 'client', 'dist');
-    if (!fs.existsSync(distDir)) {
-      fs.mkdirSync(distDir);
-    }
+    fse.emptyDirSync(distDir);
     ls(templatesDir)
-    .then(files => Promise.all(files.map(file => ls(file))))
+    .then(templates => Promise.all(templates.map(file => ls(file))))
     .then(results => {
-      results.forEach(directory => {
-        directory.forEach(file => {
+      results.forEach(templateDir => {
+        let templateFiles = [];
+        let templateDirectories = [];
+        templateDir.forEach(object => {
+          if (fs.lstatSync(object).isDirectory()) {
+            templateDirectories.push(object);
+          } else {
+            templateFiles.push(object);
+          }
+        });
+        // Minify top-level files
+        templateFiles.forEach(file => {
           const extension = path.extname(file);
           const destFile = file.replace('templates', 'dist')
               .replace(extension, `-min${extension}`);
@@ -105,6 +114,11 @@ const minify = {
             minifyHtml(fs.readFileSync(file, {encoding: 'utf8'}), destFile);
           }
         });
+        // Leave directories alone, assuming they are already minified
+        templateDirectories.forEach(directory => {
+          const destDir = directory.replace('templates', 'dist');
+          fse.copy(directory, destDir);
+        });
       });
     })
     .catch(error => {
@@ -115,9 +129,6 @@ const minify = {
   minifyStatic() {
     const staticDir = path.join(__dirname, 'client');
     const distDir = path.join(__dirname, 'client', 'dist');
-    if (!fs.existsSync(distDir)) {
-      fs.mkdirSync(distDir);
-    }
     let rootFiles = [];
     ls(staticDir)
     .then(files => {
@@ -181,8 +192,8 @@ const minify = {
             `<style>${css}</style>`);
         fs.writeFileSync(indexHtml.destFile, html);
       });
-      fs.createReadStream(path.join(__dirname, 'client', 'favicon.ico'))
-          .pipe(fs.createWriteStream(path.join(distDir, 'favicon.ico')));
+      fse.copy(path.join(__dirname, 'client', 'favicon.ico'),
+          path.join(distDir, 'favicon.ico'));
     })
     .catch(error => {
       throw error;

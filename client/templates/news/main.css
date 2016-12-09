@@ -5,9 +5,6 @@ html, body {
 
 nav {
   display: flex;
-  position: absolute;
-  left: .5rem;
-  top: .5rem;
 }
 
 #container {
@@ -58,6 +55,12 @@ article {
   -moz-osx-font-smoothing: grayscale;
 }
 
+@media (max-width: 500px) {
+  article header a {
+    font-size: .75rem;
+  }
+}
+
 article header a {
   font-weight: bold;
   text-decoration: none;
@@ -71,8 +74,15 @@ article section a {
   color: black;
 }
 
-article img, video, figure, div, p, a, iframe {
-  max-width: 100% !important;
+@media (max-width: 500px) {
+  article img, video, figure, div, p, a, iframe {
+    max-width: 100% !important;
+  }
+}
+@media (min-width: 501px) {
+  article img, video, figure, div, p, a, iframe {
+    max-width: 500px !important;
+  }
 }
 
 article footer {
@@ -87,6 +97,9 @@ article footer {
   font-size: 1.25rem;
   font-weight: lighter;
   padding: 0 .1rem;
+  position: absolute;
+  left: .5rem;
+  top: .5rem;
 }
 
 .logo {

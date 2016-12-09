@@ -20,7 +20,6 @@ function getHtml(entries) {
   // Helper function to proxy unsecure HTTP URLs over HTTPS
   const proxyHttps = url => /^http:\/\//.test(url) ?
       `./proxy?url=${encodeURIComponent(url)}` : url;
-
   return Promise.resolve(`
       ${entries.map(entry => {
         let videos = [];
@@ -67,7 +66,14 @@ function getHtml(entries) {
 getFeed(instance.rssFeed)
 .then(entries => getHtml(entries))
 .then(html => {
-  document.querySelector('#container').querySelector('main').innerHTML = html;
+  const container = document.querySelector('#container');
+  container.querySelector('main').innerHTML = html;
+  const showFallbackImage = imgErrorEvent => {
+    imgErrorEvent.target.src = `${location.origin}/static/offline.svg`;
+  };
+  for (let img of container.querySelectorAll('img')) {
+    img.addEventListener('error', showFallbackImage);
+  }
 })
 .catch(error => {
   console.log(error);
