@@ -34,6 +34,12 @@
     "fs-extra": "^1.0.0",
     "html-minifier": "^3.2.3",
     "imagemin": "^5.2.2",
+    "imagemin-gifsicle": "^5.1.0",
+    "imagemin-jpegtran": "^5.0.2",
+    "imagemin-optipng": "^5.2.1",
+    "imagemin-svgo": "^5.2.0",
+    "imagemin-webp": "^4.0.0",
+    "imagemin-zopfli": "^5.0.0",
     "postcss": "^5.2.6",
     "request": "^2.79.0",
     "sharp": "^0.16.2"

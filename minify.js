@@ -192,8 +192,6 @@ const minify = {
             `<style>${css}</style>`);
         fs.writeFileSync(indexHtml.destFile, html);
       });
-      fse.copy(path.join(__dirname, 'client', 'favicon.ico'),
-          path.join(distDir, 'favicon.ico'));
     })
     .catch(error => {
       throw error;

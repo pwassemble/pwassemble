@@ -18,14 +18,12 @@ app.use(compression({threshold: 0}));
 app.get('*', (req, res, next) => {
   const forwardedProtoHeader = req.headers['x-forwarded-proto'];
   if (forwardedProtoHeader && forwardedProtoHeader !== 'https') {
-    res.redirect(`https://${req.host}${req.url}`);
-  } else {
-    next();
+    return res.redirect(`https://${req.host}${req.url}`);
   }
+  return next();
 });
 
 app.use('/', express.static('client/dist'));
-app.use('/static', express.static('client/static'));
 
 app.get('/hello', routes.hello);
 app.get('/feeds', routes.feeds);

@@ -15,8 +15,8 @@ window.init = () => {
       icon: instance.iconImgId,
       vibrate: [200, 100, 200, 100, 200, 100, 400],
       actions: [
-        {action: 'yes', title: 'Yes', icon: './img/yes.png'},
-        {action: 'no', title: 'No', icon: './img/no.png'}
+        {action: 'yes', title: 'Yes', icon: './static/yes.png'},
+        {action: 'no', title: 'No', icon: './static/no.png'}
       ]
     };
     const imgs = document.querySelectorAll('img');

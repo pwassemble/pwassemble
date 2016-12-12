@@ -6,7 +6,6 @@ const DYNAMIC_CACHE_NAME = 'pwassemble-dynamic-cache-v1';
 const STATIC_FILES = [
   './',
   './index.html',
-  './favicon.ico',
   './js/bundle-min.js',
   './static/yes.png',
   './static/no.png',
