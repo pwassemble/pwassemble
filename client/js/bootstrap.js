@@ -87,7 +87,8 @@ window.init = () => {
         head.appendChild(createLink('icon', value));
         ['76', '120', '152'].map(size => {
           return head.appendChild(createLink('apple-touch-icon',
-              `./assets?input=${value}&width=${size}&height=${size}`, size));
+              `./assets?url=${
+              encodeURIComponent(value)}&width=${size}&height=${size}`, size));
         });
       } else if ((key === 'colorBgPrimary' || (key === 'colorBgSecondary') ||
                  (key === 'colorFgPrimary') || (key === 'colorFgSecondary'))) {

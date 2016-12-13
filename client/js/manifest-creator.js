@@ -11,7 +11,7 @@ window.manifestCreator = {
           "icons": [
             ${sizes.map(size => {
               return `{
-                "src": "${location.origin}/assets?input=${
+                "src": "${location.origin}/assets?url=${
                     encodeURIComponent(manifestObject.icon)
                     }&width=${size}&height=${size}",
                 "sizes": "${size}x${size}",

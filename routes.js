@@ -3,6 +3,8 @@
 const FeedParser = require('feedparser');
 const request = require('request');
 const sharp = require('sharp');
+const imagemin = require('imagemin');
+const fileType = require('file-type');
 
 const routes = {
   hello(req, res) {
@@ -40,8 +42,8 @@ const routes = {
   },
 
   assets(req, res) {
-    const {input, width, height} = req.query;
-    request(input, {
+    const {url, width, height} = req.query;
+    request(url, {
       encoding: null,
       gzip: true
     }, (error, response, body) => {
@@ -60,6 +62,36 @@ const routes = {
     });
   },
 
+  optimize(req, res) {
+    const input = req.query.url;
+    request(input, {
+      encoding: null,
+      gzip: true
+    }, (error, response, body) => {
+      if (error || response.statusCode !== 200) {
+        return res.sendStatus(500);
+      }
+      const plugins = [
+        require('imagemin-svgo')(),
+        require('imagemin-gifsicle')(),
+        require('imagemin-jpegtran')(),
+        require('imagemin-optipng')(),
+        require('imagemin-zopfli')({more: true})
+      ];
+      // If the user agent accepts WebP send it
+      const acceptHeader = req.headers.accept || '';
+      if (/image\/webp/.test(acceptHeader)) {
+        plugins.push(require('imagemin-webp')());
+      }
+      imagemin.buffer(body, {plugins: plugins})
+      .then(outputBuffer => {
+        res.set('Content-Type', fileType(outputBuffer).mime);
+        return res.send(outputBuffer);
+      })
+      .catch(() => res.sendStatus(500));
+    });
+  },
+
   proxy(req, res) {
     const url = req.query.url;
     request(url, {
@@ -70,9 +102,9 @@ const routes = {
         return res.sendStatus(404);
       }
       res.set({
-        'Content-Type': response.headers['content-type'],
-        'Cache-Control': response.headers['cache-control'] ?
-            response.headers['cache-control'] : 'max-age=3600'
+        'Content-Type': response.headers['Content-Type'],
+        'Cache-Control': response.headers['Cache-Control'] ?
+            response.headers['Cache-Control'] : 'max-age=3600'
       });
       return res.send(body);
     });
