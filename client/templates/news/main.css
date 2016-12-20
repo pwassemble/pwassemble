@@ -4,7 +4,38 @@ html, body {
 }
 
 nav {
-  display: flex;
+  position: fixed;
+  height: 100%;
+  padding-top: 2.5rem;
+  top: 0;
+  width: 80%;
+  background-color: var(--colorFgSecondary);
+}
+
+nav:not(:target) {
+  left: -100%;
+  transition: left .5s;
+}
+
+nav:target {
+  left: 0;
+  transition: left .5s;
+}
+
+nav ul {
+  list-style: none;
+  padding-left: .5rem;
+}
+
+nav li {
+  border-bottom: solid 1px var(--colorBgSecondary);
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+nav a {
+  color: var(--colorBgSecondary);
+  text-decoration: none;
 }
 
 #container {
@@ -86,7 +117,7 @@ article footer {
   font-size: .75rem;
 }
 
-.hamburger-menu {
+.open-menu, .close-menu {
   background-color: transparent;
   border: none;
   color: #fff;
@@ -94,6 +125,7 @@ article footer {
   font-weight: lighter;
   padding: 0 .1rem;
   position: absolute;
+  text-decoration: none;
   left: .5rem;
   top: .5rem;
 }
@@ -107,4 +139,8 @@ article footer {
   height: 5vh;
   vertical-align: middle;
   width: auto;
+}
+
+.logo-inline {
+  height: 1.25rem;
 }
