@@ -10,6 +10,7 @@ nav {
   top: 0;
   width: 80%;
   background-color: var(--colorFgSecondary);
+  z-index: 1;
 }
 
 nav:not(:target) {
