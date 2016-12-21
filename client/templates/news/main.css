@@ -123,7 +123,6 @@ article footer {
   border: none;
   color: #fff;
   font-size: 1.25rem;
-  font-weight: lighter;
   padding: 0 .1rem;
   position: absolute;
   text-decoration: none;
@@ -144,4 +143,9 @@ article footer {
 
 .logo-inline {
   height: 1.25rem;
+}
+
+.rss-inline {
+  height: 1.25rem;
+  margin-right: .25rem;
 }
