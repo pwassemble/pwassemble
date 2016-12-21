@@ -4,7 +4,7 @@ html, body {
 }
 
 nav {
-  position: fixed;
+  position: absolute;
   height: 100%;
   padding-top: 2.5rem;
   top: 0;
@@ -14,7 +14,7 @@ nav {
 }
 
 nav:not(:target) {
-  left: -100%;
+  left: -100vw;
   transition: left .5s;
 }
 
@@ -102,14 +102,14 @@ article section a {
   color: black;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 1000px) {
   article img, video, figure, div, p, a, iframe {
     max-width: 100% !important;
   }
 }
-@media (min-width: 501px) {
+@media (min-width: 1001px) {
   article img, video, figure, div, p, a, iframe {
-    max-width: 500px !important;
+    max-width: 1000px !important;
   }
 }
 
