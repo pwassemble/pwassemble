@@ -1,5 +1,5 @@
 html, body {
-  background-color: black;
+  background-color: white;
   font-size: 14pt;
 }
 
@@ -45,13 +45,15 @@ nav a {
   flex-direction: column;
   height: 100vh;
   margin: 0;
+  padding: .25rem;
   position: relative;
+  width: 100vw;
 }
 
 #container > header {
-  background-color: black;
+  background-color: white;
   border-bottom: solid .5rem var(--colorFgPrimary);
-  color: white;
+  color: var(--colorFgPrimary);
   display: flex;
   flex-shrink: 0;
   margin-bottom: -1rem;
@@ -67,62 +69,59 @@ nav a {
 
 #container > footer {
   border-top: solid .5rem var(--colorFgPrimary);
-  background-color: black;
-  color: white;
+  background-color: white;
+  color: var(--colorFgPrimary);
   flex-shrink: 0;
   font-size: .75rem;
+  padding: .25rem;
 }
 
-article {
-  background: rgba(255, 255, 255, .95);
-  margin: .5rem;
-  hypens: auto;
+form {
+  background-color: white;
   padding: .5rem;
-  line-height: 1.5;
-  letter-spacing: 0.01rem;
-  font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
 }
 
-@media (max-width: 500px) {
-  article header a {
-    font-size: .75rem;
-  }
-}
-
-article header a {
-  font-weight: bold;
-  text-decoration: none;
-}
-
-article section {
-  font-family: serif;
-}
-
-article section a {
-  color: black;
-}
-
-@media (max-width: 1000px) {
-  article img, video, figure, div, p, a, iframe {
-    max-width: 100% !important;
-  }
-}
-@media (min-width: 1001px) {
-  article img, video, figure, div, p, a, iframe {
-    max-width: 1000px !important;
-  }
-}
-
-article footer {
-  border-top: 1px solid var(--colorFgPrimary);
+input, select {
+  border: solid darkgray 2px;
+  border-radius: 3px;
+  color: darkgray;
   font-size: .75rem;
+  margin: .25rem;
+  padding: .5rem;
+  width: 8rem;
+}
+
+label[for='amount']::before {
+  content: "$";
+  color: darkgray;
+  margin-left: -.7rem;
+  position: relative;
+  left: -.5rem;
+  top: .25rem;
+}
+
+button {
+  color: white;
+  background-color: var(--colorFgSecondary);
+  border: none;
+  border-radius: 3px;
+  font-size: 1.15rem;
+  font-weight: bold;
+  margin: .25rem;
+  padding: .5rem;
+  text-align: center;
+  width: 100%;
+}
+
+p {
+  font-size: 1.1rem;
+  color: white;
 }
 
 .open-menu, .close-menu {
   background-color: transparent;
   border: none;
-  color: #fff;
+  color: var(--colorFgPrimary);
   font-size: 1.25rem;
   padding: .25rem 1rem .25rem .25rem;
   text-decoration: none;
@@ -130,12 +129,14 @@ article footer {
 
 .logo {
   height: 7.5vh;
+  margin: .25rem;
   max-width: 50vw;
   width: auto;
 }
 
 .logo-small {
   height: 5vh;
+  margin: .25rem;
   max-width: 25vw;
   vertical-align: middle;
   width: auto;
@@ -145,7 +146,13 @@ article footer {
   height: 1.25rem;
 }
 
-.rss-inline {
-  height: 1.25rem;
-  margin-right: .25rem;
+.imprint {
+  background: rgba(0, 0, 0, 0.5) url(https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Money_Cash.jpg/1024px-Money_Cash.jpg) no-repeat scroll 0% 0% / cover padding-box border-box;
+  color: black;
+  font-size: .5rem;
+  padding: 1rem .25rem;
+}
+
+.imprint div {
+  background-color: rgba(255,255,255,.5);
 }

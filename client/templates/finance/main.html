@@ -1,0 +1,63 @@
+<header>
+  <a class="open-menu" aria-label="Open Menu" href="#nav" >☰</a>
+  <img class="logo" alt="${instance.companyName} logo"
+      src="${instance.companyLogoImgId}">
+</header>
+<nav id="nav">
+  <a class="close-menu" aria-label="Close Menu" href="#">ⓧ</a>
+  <ul>
+    <li><a href="${location.href}">🏠 Home</a></li>
+    <li><a href="#">💷 Credit</a></li>
+    <li><a href="#">💶 Loan</a></li>
+    <li><a href="#">💵 Debit</a></li>
+    <li><a href="#">💼 Careers</a></li>
+    <li><a href="#"><img class="logo-inline" src="${instance.iconImgId}" alt=""> About us</a></li>
+  </ul>
+</nav>
+<main>
+  <h1>${instance.heroText}</h1>
+  <h2>${instance.subText}</h2>
+  <p>${instance.ctaText}</p>
+  <form class="form">
+    <div>
+      <input id="amount" name="amount" type="number" value="10000">
+      <label for="amount">Credit Amount</label>
+    </div>
+    <div>
+      <select id="period" name="period">
+        <option>🗓 12 Months</option>
+        <option>🗓 24 Months</option>
+        <option>🗓 36 Months</option>
+        <option>🗓 48 Months</option>
+      </select>
+      <label for="period">Credit Period</label>
+    </div>
+    <div>
+      <select id="purpose" name="purpose">
+        <option>⛱ Vacation</option>
+        <option>🚙 Vehicle</option>
+        <option>🏡 Real Estate</option>
+        <option>✌🏻 Free usage</option>
+      </select>
+      <label for="purpose">Intended Purpose</label>
+    </div>
+    <div>
+      <button id="calculate" value="Calculate">✅ Calculate</button>
+    </div>
+  </form>
+  <div class="imprint">
+    <div>
+      An <strong>interest rate</strong>, or <strong>rate of interest</strong>,
+      is the amount of interest due per period, as a proportion of the amount lent,
+      deposited or borrowed (called the principal sum).
+      The total interest on an amount lent or borrowed depends on the principal sum,
+      the interest rate, the compounding frequency, and the length of time
+      over which it is lent, deposited or borrowed.
+    </div>
+  </div>
+</main>
+<footer>
+  &copy; ${new Date().getFullYear()} ${instance.companyName}
+  <img class="logo-small" alt="${instance.companyName} logo"
+      src="${instance.companyLogoImgId}">
+</footer>
