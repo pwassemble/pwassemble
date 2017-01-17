@@ -1,8 +1,8 @@
 const DEBUG_MODE = true;
 const DEBUG_PREFIX = '👷';
 
-const STATIC_CACHE_NAME = 'pwassemble-static-cache-v1';
-const DYNAMIC_CACHE_NAME = 'pwassemble-dynamic-cache-v1';
+const STATIC_CACHE_NAME = 'pwassemble-static-cache-v20170117';
+const DYNAMIC_CACHE_NAME = 'pwassemble-dynamic-cache-v20170117';
 const STATIC_FILES = [
   './',
   './index.html',
@@ -14,7 +14,7 @@ const STATIC_FILES = [
 
 const REQUEST_STRATEGIES = new Map();
 const HOST = location.host.replace(/\./g, '\\.');
-REQUEST_STRATEGIES.set(new RegExp(`${HOST}/(?:news|travel)`), {
+REQUEST_STRATEGIES.set(new RegExp(`${HOST}/(?:news|travel|finance|fashion)`), {
   strategy: 'cacheFirst',
   cache: true
 });
