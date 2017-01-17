@@ -1,3 +1,7 @@
+/* global instance */
+/* eslint "require-jsdoc": 0 */
+/* eslint "no-unused-vars": 0 */
+
 const form = document.querySelector('#form');
 form.addEventListener('submit', e => {
   const title = instance.companyName;
@@ -6,7 +10,7 @@ form.addEventListener('submit', e => {
     icon: instance.iconImgId,
     vibrate: [200, 100, 200, 100, 200, 100, 400]
   };
-  new Notification(title, options);
+  const notification = new Notification(title, options);
   return false;
 });
 

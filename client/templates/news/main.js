@@ -1,5 +1,6 @@
 /* global instance */
 /* eslint "require-jsdoc": 0 */
+
 function getFeed(url) {
   return fetch(`./feeds?url=${encodeURIComponent(url)}`)
   .then(response => {

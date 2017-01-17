@@ -1,0 +1,151 @@
+html, body {
+  background-color: white;
+  font-size: 14pt;
+}
+
+h1, h2 {
+  font-family: Geneva;
+  font-weight: bold;
+}
+
+h1 {
+  font-size: 1.5rem;
+  text-shadow: white 1px 1px 3px;
+}
+
+h2 {
+  font-size: 1rem;
+  background-color: var(--colorBgSecondary);
+}
+
+nav {
+  position: absolute;
+  height: 100%;
+  top: 0;
+  width: 80%;
+  padding: .25rem;
+  background-color: var(--colorFgSecondary);
+  z-index: 1;
+}
+
+nav:not(:target) {
+  left: -100vw;
+  transition: left .5s;
+}
+
+nav:target {
+  left: 0;
+  transition: left .5s;
+}
+
+nav ul {
+  list-style: none;
+  padding-left: .5rem;
+}
+
+nav li {
+  border-bottom: solid 1px var(--colorBgSecondary);
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+nav a {
+  color: var(--colorBgSecondary);
+  text-decoration: none;
+}
+
+input, select {
+  border: solid darkgray 2px;
+  border-radius: 3px;
+  color: darkgray;
+  font-size: .75rem;
+  margin: .25rem;
+  padding: .5rem;
+}
+
+#container {
+  background: rgba(0, 0, 0, 0) url(${instance.heroImgId}) no-repeat scroll 0% 0% / cover padding-box border-box;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  margin: 0;
+  padding: .25rem;
+  position: relative;
+  width: 100vw;
+}
+
+#container > header {
+  background-color: white;
+  border-bottom: solid .5rem var(--colorFgPrimary);
+  color: var(--colorFgPrimary);
+  display: flex;
+  flex-shrink: 0;
+  margin-bottom: -1rem;
+  text-align: center;
+}
+
+#container > main {
+  flex-grow: 1;
+  margin: 0;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+#container > footer {
+  border-top: solid .5rem var(--colorFgPrimary);
+  background-color: white;
+  color: var(--colorFgPrimary);
+  flex-shrink: 0;
+  font-size: .75rem;
+  padding: .25rem;
+}
+
+.open-menu, .close-menu {
+  background-color: transparent;
+  border: none;
+  color: var(--colorFgPrimary);
+  font-size: 1.25rem;
+  padding: .25rem 1rem .25rem .25rem;
+  text-decoration: none;
+}
+
+.logo {
+  height: 7.5vh;
+  margin: .25rem;
+  max-width: 50vw;
+  width: auto;
+}
+
+.logo-small {
+  height: 5vh;
+  margin: .25rem;
+  max-width: 25vw;
+  vertical-align: middle;
+  width: auto;
+}
+
+.logo-inline {
+  height: 1.25rem;
+}
+
+.designer {
+  background-color: rgba(255,255,255,.75);
+  padding: .5rem;
+}
+
+.toolbar {
+  background-color: white;
+  font-size: .8rem;
+}
+
+.text {
+  font-family: "Comic Sans", "Comic Sans MS";
+  position: relative;
+  top: 120px;
+  text-align: center;
+}
+
+.cta-text {
+  color: white;
+  padding: .25rem;
+}
