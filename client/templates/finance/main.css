@@ -40,7 +40,7 @@ nav a {
 }
 
 #container {
-  background: rgba(0, 0, 0, 0) url(${instance.heroImgId}) no-repeat scroll 0% 0% / cover padding-box border-box;
+  background: rgba(0, 0, 0, 0) url(${PWASSEMBLE.instance.heroImgId}) no-repeat scroll 0% 0% / cover padding-box border-box;
   display: flex;
   flex-direction: column;
   height: 100vh;

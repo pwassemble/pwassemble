@@ -1,18 +1,23 @@
-/* global instanceLoader, manifestCreator, serviceWorkerInstaller, templateLoader */
-window.init = () => {
-  let instance;
-  let serviceWorkerRegistration;
+var PWASSEMBLE = window.PWASSEMBLE || {};
+PWASSEMBLE = {
+  DEBUG_MODE: true,
+  DEBUG_PREFIX: '🕸',
+  isSubscribed: null,
+  instance: null,
+  serviceWorkerRegistration: null
+};
 
+PWASSEMBLE.init = () => {
   const body = document.body;
   const head = document.head;
   const fragment = document.createDocumentFragment();
 
   // Helper function for push notifications
   const setUpPushNotifications = () => {
-    const title = instance.companyName;
+    const title = PWASSEMBLE.instance.companyName;
     const options = {
-      body: instance.ctaText,
-      icon: instance.iconImgId,
+      body: PWASSEMBLE.instance.ctaText,
+      icon: PWASSEMBLE.instance.iconImgId,
       vibrate: [200, 100, 200, 100, 200, 100, 400],
       actions: [
         {action: 'yes', title: 'Yes', icon: './static/yes.png'},
@@ -21,7 +26,21 @@ window.init = () => {
     };
     const imgs = document.querySelectorAll('img');
     const showNotification = () => {
-      serviceWorkerRegistration.showNotification(title, options);
+      PWASSEMBLE.serviceWorkerRegistration.pushManager.getSubscription()
+      .then(subscription => {
+        if (subscription) {
+          PWASSEMBLE.serviceWorkerRegistration.showNotification(title, options);
+        } else {
+          console.log(PWASSEMBLE.DEBUG_PREFIX,
+              'Push notification permission not granted');
+        }
+      })
+      .catch(notificationError => {
+        if (PWASSEMBLE.DEBUG_MODE) {
+          console.log(PWASSEMBLE.DEBUG_PREFIX,
+              'Push notification permission not granted', notificationError);
+        }
+      });
     };
     for (let i = 0, lenI = imgs.length; i < lenI; i++) {
       imgs[i].addEventListener('click', showNotification);
@@ -46,43 +65,44 @@ window.init = () => {
     return meta;
   };
 
-  instanceLoader.load()
+  PWASSEMBLE.instanceLoader.load()
   .then(instance_ => {
-    instance = instance_;
-    instance.companyName = instance.companyName.replace(/\+/g, ' ');
-    instance.ctaText = instance.ctaText.replace(/\+/g, ' ');
-    instance.heroText = instance.heroText.replace(/\+/g, ' ');
-    instance.subText = instance.subText.replace(/\+/g, ' ');
-    if (!Object.keys(instance).length) {
+    PWASSEMBLE.instance = instance_;
+    PWASSEMBLE.instance.companyName = PWASSEMBLE.instance.companyName
+        .replace(/\+/g, ' ');
+    PWASSEMBLE.instance.ctaText = PWASSEMBLE.instance.ctaText
+        .replace(/\+/g, ' ');
+    PWASSEMBLE.instance.heroText = PWASSEMBLE.instance.heroText
+        .replace(/\+/g, ' ');
+    PWASSEMBLE.instance.subText = PWASSEMBLE.instance.subText
+        .replace(/\+/g, ' ');
+    if (!Object.keys(PWASSEMBLE.instance).length) {
       return;
     }
-    document.title = `PWAssemble—${instance.companyName}`;
+    document.title = `PWAssemble—${PWASSEMBLE.instance.companyName}`;
     // Create manifest
     const manifestObject = {
-      name: instance.companyName,
-      shortName: instance.companyName,
-      icon: instance.iconImgId,
-      themeColor: instance.colorFgPrimary,
-      backgroundColor: instance.colorBgPrimary,
-      startUrl: `${location.origin}/?id=${instance.pwaInstanceId}`
+      name: PWASSEMBLE.instance.companyName,
+      shortName: PWASSEMBLE.instance.companyName,
+      icon: PWASSEMBLE.instance.iconImgId,
+      themeColor: PWASSEMBLE.instance.colorFgPrimary,
+      backgroundColor: PWASSEMBLE.instance.colorBgPrimary,
+      startUrl: `${location.origin}/?id=${PWASSEMBLE.instance.pwaInstanceId}`
     };
     const manifestUrl = `${location.origin}/manifests?base64=${
-        btoa(manifestCreator.create(manifestObject))}`;
+        btoa(PWASSEMBLE.manifestCreator.create(manifestObject))}`;
     head.appendChild(createLink('manifest', manifestUrl));
 
-    return serviceWorkerInstaller.install()
-    .then(serviceWorkerRegistration_ => {
-      serviceWorkerRegistration = serviceWorkerRegistration_;
-    });
+    return PWASSEMBLE.serviceWorkerInstaller.install();
   })
   .then(() => {
     // Create global CSS
     let cssText = [];
-    for (let key in instance) {
-      if (!{}.hasOwnProperty.call(instance, key)) {
+    for (let key in PWASSEMBLE.instance) {
+      if (!PWASSEMBLE.instance.hasOwnProperty(key)) {
         continue;
       }
-      const value = instance[key];
+      const value = PWASSEMBLE.instance[key];
       if (key === 'iconImgId') {
         head.appendChild(createLink('icon', value));
         ['76', '120', '152'].map(size => {
@@ -102,10 +122,10 @@ window.init = () => {
       head.appendChild(createLink('stylesheet', cssUrl));
     }
     head.appendChild(createMeta('apple-mobile-web-app-title',
-        instance.companyName));
+        PWASSEMBLE.instance.companyName));
 
     // Create content
-    return templateLoader.create(instance);
+    return PWASSEMBLE.templateLoader.create();
   })
   .then(content => {
     fragment.appendChild(content.html);
@@ -115,8 +135,8 @@ window.init = () => {
     body.querySelector('.loading').remove();
 
     // Set up push notifications
-    if (serviceWorkerRegistration) {
-      setUpPushNotifications(instance);
+    if (PWASSEMBLE.serviceWorkerRegistration) {
+      setUpPushNotifications(PWASSEMBLE.instance);
     }
   })
   .catch(error => {

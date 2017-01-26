@@ -1,7 +1,7 @@
 <header>
   <a class="open-menu" aria-label="Open Menu" href="#nav" >☰</a>
-  <img class="logo" alt="${instance.companyName} logo"
-      src="${instance.companyLogoImgId}">
+  <img class="logo" alt="${PWASSEMBLE.instance.companyName} logo"
+      src="${PWASSEMBLE.instance.companyLogoImgId}">
 </header>
 <nav id="nav">
   <a class="close-menu" aria-label="Close Menu" href="#">ⓧ</a>
@@ -10,13 +10,13 @@
     <li><a href="#">🎨 Create</a></li>
     <li><a href="#">🛒 Shop</a></li>
     <li><a href="#">💼 Careers</a></li>
-    <li><a href="#"><img class="logo-inline" src="${instance.iconImgId}" alt=""> About us</a></li>
+    <li><a href="#"><img class="logo-inline" src="${PWASSEMBLE.instance.iconImgId}" alt=""> About us</a></li>
   </ul>
 </nav>
 <main>
-  <h1>${instance.heroText}</h1>
+  <h1>${PWASSEMBLE.instance.heroText}</h1>
   <div class="designer">
-    <div id="text" class="text" contenteditable>Hello ${instance.companyName}<br>🖖🏻</div>
+    <div id="text" class="text" contenteditable>Hello ${PWASSEMBLE.instance.companyName}<br>🖖🏻</div>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 580 610"><g fill="none" stroke="#000"><path fill="rgb(192,192,192)" id="shirt" d="M1.818 235.818L50 264.908l50 21.82 23.636-43.637 10-6.36 10.91 56.37L130 502.19l-17.273 66.36 69.09 23.635 107.274 10 97.28-9.09 45.46-13.637 9.09-3.637L429.09 554l-7.272-160.91-.91-93.635 2.728-61.82 3.637-9.09 5.454-.91 25.454 51.82L473.64 284l38.182-10.91 45.454-35.454-80-160.91-31.818-20.908L384.546 34l-41.82-19.09-3.635-8.183-48.18-5.454h-40l-41.82 6.363-10 16.364-10.9 12.727L113.64 64 88.18 81.273 1.818 235.818z"/><path d="M10.91 219.455L50 241.273l17.273 10.91 28.182 10.908 13.636 8.19M209.55 8.09l17.728 19.546 23.636 9.09s18.18 3.638 22.726 3.638h19.09l20-3.637 15.456-7.272 6.365-7.273 5-15"/><path d="M202.727 20.364l16.364 15.454 25 10 15.46 2.273 24.09.91h15.46l13.187-3.18 10.91-4.09 8.635-6.36 6.365-7.27 5.452-13.632m109.543 253.18l24.545-4.09 21.82-5.456 21.364-9.544L535 236.73 550 224M115.455 558.09l28.18 10.455 30.91 9.09 60 7.274 51.82 3.63 41.817-1.82L360 584l25.455-3.636 30.91-10 18.18-8.182"/></g></svg>
   </div>
   <div class="toolbar">
@@ -25,11 +25,11 @@
     <input type="color" id="font-color" value="#000000">
     <label for="shirt-color">𝑨𝓑𝑪 Color</label>
   </div>
-  <h2>${instance.subText}</h2>
-  <p class="cta-text">${instance.ctaText}</p>
+  <h2>${PWASSEMBLE.instance.subText}</h2>
+  <p class="cta-text">${PWASSEMBLE.instance.ctaText}</p>
 </main>
 <footer>
-  &copy; ${new Date().getFullYear()} ${instance.companyName}
-  <img class="logo-small" alt="${instance.companyName} logo"
-      src="${instance.companyLogoImgId}">
+  &copy; ${new Date().getFullYear()} ${PWASSEMBLE.instance.companyName}
+  <img class="logo-small" alt="${PWASSEMBLE.instance.companyName} logo"
+      src="${PWASSEMBLE.instance.companyLogoImgId}">
 </footer>

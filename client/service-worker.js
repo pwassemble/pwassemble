@@ -1,12 +1,12 @@
 const DEBUG_MODE = true;
 const DEBUG_PREFIX = '👷';
 
-const STATIC_CACHE_NAME = 'pwassemble-static-cache-v20170117';
-const DYNAMIC_CACHE_NAME = 'pwassemble-dynamic-cache-v20170117';
+const STATIC_CACHE_NAME = 'pwassemble-static-cache-v20170126';
+const DYNAMIC_CACHE_NAME = 'pwassemble-dynamic-cache-v20170126';
 const STATIC_FILES = [
   './',
   './index.html',
-  './js/bundle-min.js',
+  './js/bundle.min.js',
   './static/yes.png',
   './static/no.png',
   './static/offline.svg'
@@ -14,34 +14,43 @@ const STATIC_FILES = [
 
 const REQUEST_STRATEGIES = new Map();
 const HOST = location.host.replace(/\./g, '\\.');
-REQUEST_STRATEGIES.set(new RegExp(`${HOST}/(?:news|travel|finance|fashion)`), {
+
+// Local template resources main.min.{html, js, css}
+REQUEST_STRATEGIES.set(new RegExp(`${HOST}/templates`), {
   strategy: 'cacheFirst',
   cache: true
 });
+// Local static resources and main bootstrapping script resources
 REQUEST_STRATEGIES.set(new RegExp(`${HOST}/(?:js|static)`), {
   strategy: 'cacheFirst',
-  cache: false
+  cache: true
 });
+// Local proxied remote resources to ensure HTTPS integrity
 REQUEST_STRATEGIES.set(new RegExp(`${HOST}/proxy`), {
   strategy: 'networkFirst',
   cache: false
 });
+// Local other resources
 REQUEST_STRATEGIES.set(new RegExp(`${HOST}/\\w+`), {
   strategy: 'networkFirst',
   cache: true
 });
+// Remote Google static resources
 REQUEST_STRATEGIES.set(/www\.gstatic\.com/, {
   strategy: 'cacheFirst',
   cache: true
 });
+// Remote Google dynamic API resources
 REQUEST_STRATEGIES.set(/apis\.google\.com/, {
   strategy: 'networkFirst',
   cache: true
 });
+// Remote Google dynamic API resources
 REQUEST_STRATEGIES.set(/www\.googleapis\.com/, {
   strategy: 'networkFirst',
   cache: true
 });
+// Remote Firebase static resources
 REQUEST_STRATEGIES.set(/firebasestorage\.googleapis\.com/, {
   strategy: 'cacheFirst',
   cache: true
@@ -209,13 +218,38 @@ self.addEventListener('activate', activateEvent => {
   })
   .then(() => self.clients.matchAll())
   .then(clients => {
-    caches.open(STATIC_CACHE_NAME)
+    return caches.open(STATIC_CACHE_NAME)
     .then(cache => {
       clients.forEach(client => {
-        cache.add(client.url);
+        const url = client.url;
+        if (DEBUG_MODE) {
+          console.log(DEBUG_PREFIX, 'Cached', url, 'in', STATIC_CACHE_NAME);
+        }
+        cache.add(url);
       });
     });
   }));
+});
+
+self.addEventListener('message', messageEvent => {
+  if (DEBUG_MODE) {
+    console.log(DEBUG_PREFIX, 'Incoming message');
+  }
+  if (messageEvent.data.command === 'cache-self') {
+    self.clients.matchAll()
+    .then(clients => {
+      caches.open(STATIC_CACHE_NAME)
+      .then(cache => {
+        clients.forEach(client => {
+          const url = messageEvent.data.url;
+          if (DEBUG_MODE) {
+            console.log(DEBUG_PREFIX, 'Cached', url, 'in', STATIC_CACHE_NAME);
+          }
+          cache.add(url);
+        });
+      });
+    });
+  }
 });
 
 self.addEventListener('fetch', fetchEvent => {
@@ -231,14 +265,12 @@ self.addEventListener('fetch', fetchEvent => {
     if (DEBUG_MODE) {
       console.log(DEBUG_PREFIX, 'Fetch cache first', requestUrl);
     }
-    fetchEvent.respondWith(getCacheFirstResponse(fetchEvent.request));
-    return;
+    return fetchEvent.respondWith(getCacheFirstResponse(fetchEvent.request));
   } else if (strategy === 'networkFirst') {
     if (DEBUG_MODE) {
       console.log(DEBUG_PREFIX, 'Fetch network first', requestUrl);
     }
-    fetchEvent.respondWith(getNetworkFirstResponse(fetchEvent.request));
-    return;
+    return fetchEvent.respondWith(getNetworkFirstResponse(fetchEvent.request));
   }
 });
 
@@ -254,6 +286,15 @@ self.addEventListener('push', pushEvent => {
   .catch(() => {
     self.registration.showNotification('New push notification');
   }));
+});
+
+self.addEventListener('notificationclick', notificationClickEvent => {
+  if (DEBUG_MODE) {
+    console.log(DEBUG_PREFIX, 'Notification click received');
+  }
+  notificationClickEvent.notification.close();
+  notificationClickEvent.waitUntil(
+      clients.openWindow('https://github.com/pwassemble/'));
 });
 
 self.addEventListener('sync', function(syncEvent) {

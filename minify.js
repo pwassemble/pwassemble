@@ -81,7 +81,7 @@ const minifyCss = (code, file, destFile, returnCss = false) => {
 const minify = {
   minifyTemplates() {
     const templatesDir = path.join(__dirname, 'client', 'templates');
-    const distDir = path.join(__dirname, 'client', 'dist');
+    const distDir = path.join(__dirname, 'client', 'dist', 'templates');
     fse.emptyDirSync(distDir);
     ls(templatesDir)
     .then(templates => Promise.all(templates.map(file => ls(file))))
@@ -99,8 +99,8 @@ const minify = {
         // Minify top-level files
         templateFiles.forEach(file => {
           const extension = path.extname(file);
-          const destFile = file.replace('templates', 'dist')
-              .replace(extension, `-min${extension}`);
+          const destFile = file.replace('templates', 'dist/templates')
+              .replace(extension, `.min${extension}`);
           const destDir = path.dirname(destFile);
           if (!fs.existsSync(destDir)) {
             fs.mkdirSync(destDir);
@@ -151,10 +151,11 @@ const minify = {
       results.forEach(directory => {
         directory.forEach(file => {
           const extension = path.extname(file);
-          // All destination files should have a -min. suffix, except index.html
+          // All destination files should have a ".min." suffix, except
+          // index.html
           const destFile = file.replace('client/', 'client/dist/')
               .replace(extension, (extension === '.html' ?
-              extension : `-min${extension}`));
+              extension : `.min${extension}`));
           const destDir = path.dirname(destFile);
           if (!/libs$/.test(destDir) && !fs.existsSync(destDir)) {
             fs.mkdirSync(destDir);
@@ -178,7 +179,7 @@ const minify = {
       let jsCodes = [];
       jsFiles.map(file => jsCodes.push(
           fs.readFileSync(file, {encoding: 'utf8'})));
-      minifyJs(jsCodes.join('\n'), path.join(distDir, 'js', 'bundle-min.js'));
+      minifyJs(jsCodes.join('\n'), path.join(distDir, 'js', 'bundle.min.js'));
       // Bundle all CSS
       let cssCodes = [];
       cssFiles.map(file => cssCodes.push(
@@ -186,7 +187,7 @@ const minify = {
       // Inline bundled CSS
       minifyCss(cssCodes.join('\n'),
           path.join(distDir, 'css', 'bundle.css'),
-          path.join(distDir, 'css', 'bundle-min.css'), true)
+          path.join(distDir, 'css', 'bundle.min.css'), true)
       .then(css => {
         const html = indexHtml.result.replace(/<style>.*?<\/style>/,
             `<style>${css}</style>`);

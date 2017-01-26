@@ -1,7 +1,7 @@
 <header>
   <a class="open-menu" aria-label="Open Menu" href="#nav" >☰</a>
-  <img class="logo" alt="${instance.companyName} logo"
-      src="${instance.companyLogoImgId}">
+  <img class="logo" alt="${PWASSEMBLE.instance.companyName} logo"
+      src="${PWASSEMBLE.instance.companyLogoImgId}">
 </header>
 <nav id="nav">
   <a class="close-menu" aria-label="Close Menu" href="#">ⓧ</a>
@@ -11,13 +11,13 @@
     <li><a href="#">💶 Loan</a></li>
     <li><a href="#">💵 Debit</a></li>
     <li><a href="#">💼 Careers</a></li>
-    <li><a href="#"><img class="logo-inline" src="${instance.iconImgId}" alt=""> About us</a></li>
+    <li><a href="#"><img class="logo-inline" src="${PWASSEMBLE.instance.iconImgId}" alt=""> About us</a></li>
   </ul>
 </nav>
 <main>
-  <h1>${instance.heroText}</h1>
-  <h2>${instance.subText}</h2>
-  <p>${instance.ctaText}</p>
+  <h1>${PWASSEMBLE.instance.heroText}</h1>
+  <h2>${PWASSEMBLE.instance.subText}</h2>
+  <p>${PWASSEMBLE.instance.ctaText}</p>
   <form id="form" class="form">
     <div>
       <input id="amount" name="amount" type="number" value="10000">
@@ -57,7 +57,7 @@
   </div>
 </main>
 <footer>
-  &copy; ${new Date().getFullYear()} ${instance.companyName}
-  <img class="logo-small" alt="${instance.companyName} logo"
-      src="${instance.companyLogoImgId}">
+  &copy; ${new Date().getFullYear()} ${PWASSEMBLE.instance.companyName}
+  <img class="logo-small" alt="${PWASSEMBLE.instance.companyName} logo"
+      src="${PWASSEMBLE.instance.companyLogoImgId}">
 </footer>

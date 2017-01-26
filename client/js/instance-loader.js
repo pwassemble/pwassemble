@@ -1,10 +1,8 @@
 /* global idbKeyval, firebase */
-window.instanceLoader = {
+var PWASSEMBLE = window.PWASSEMBLE || {};
+PWASSEMBLE.instanceLoader = {
   load() {
     return new Promise((resolve, reject) => {
-      const DEBUG_MODE = true;
-      const DEBUG_PREFIX = '🕸';
-
       if (!location.search) {
         return reject(console.log('No query parameters'));
       }
@@ -12,14 +10,15 @@ window.instanceLoader = {
       if (!id || !/^\d+$/.test(id)) {
         return reject(console.log('No or invalid "id" parameter'));
       }
-      if (DEBUG_MODE) {
-        console.log(DEBUG_PREFIX, 'Instance ID', id);
+      if (PWASSEMBLE.DEBUG_MODE) {
+        console.log(PWASSEMBLE.DEBUG_PREFIX, 'Instance ID', id);
       }
       idbKeyval.get(id)
       .then(instance => {
         if (instance) {
-          if (DEBUG_MODE) {
-            console.log(DEBUG_PREFIX, 'Loading instance data from IndexedDB');
+          if (PWASSEMBLE.DEBUG_MODE) {
+            console.log(PWASSEMBLE.DEBUG_PREFIX,
+                'Loading instance data from IndexedDB');
           }
           return resolve(instance);
         }
@@ -86,8 +85,9 @@ window.instanceLoader = {
           results.forEach(result => {
             finalResults[result.dynamicComponent] = result.url;
           });
-          if (DEBUG_MODE) {
-            console.log(DEBUG_PREFIX, 'Storing instance data to IndexedDB');
+          if (PWASSEMBLE.DEBUG_MODE) {
+            console.log(PWASSEMBLE.DEBUG_PREFIX,
+                'Storing instance data to IndexedDB');
           }
           idbKeyval.set(id, finalResults);
           return finalResults;

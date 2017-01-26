@@ -6,7 +6,7 @@ h1, h2 {
   text-align: center;
 }
 body > div {
-  background: rgba(0, 0, 0, 0) url(${instance.heroImgId}) no-repeat scroll 0% 0% / cover padding-box border-box;
+  background: rgba(0, 0, 0, 0) url(${PWASSEMBLE.instance.heroImgId}) no-repeat scroll 0% 0% / cover padding-box border-box;
   overflow-y: scroll;
   overflow-x: hidden;
   display: flex;

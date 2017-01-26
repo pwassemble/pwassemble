@@ -24,6 +24,7 @@ app.get('*', (req, res, next) => {
 });
 
 app.use('/', express.static('client/dist'));
+app.use('/templates', express.static('client/dist/templates'));
 
 app.get('/hello', routes.hello);
 app.get('/feeds', routes.feeds);
