@@ -1,8 +1,7 @@
 /* eslint "require-jsdoc": 0 */
-(() => {
-  var PWASSEMBLE = window.PWASSEMBLE || {};
-  console.log('🍀 Template loaded.', PWASSEMBLE.instance.template);
-
+(PWASSEMBLE => {
+  console.log(PWASSEMBLE.TEMPLATE_PREFIX, 'Template loaded:',
+      PWASSEMBLE.instance.template);
   const shirtColor = document.querySelector('#shirt-color');
   const fontColor = document.querySelector('#font-color');
   const shirt = document.querySelector('#shirt');
@@ -19,4 +18,4 @@
   };
   fontColor.addEventListener('change', updateFontColor);
   fontColor.addEventListener('input', updateFontColor);
-})();
+})(window.PWASSEMBLE || {});

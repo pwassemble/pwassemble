@@ -1,7 +1,7 @@
 /* eslint "require-jsdoc": 0 */
-(() => {
-  var PWASSEMBLE = window.PWASSEMBLE || {};
-  console.log('🍀 Template loaded.', PWASSEMBLE.instance.template);
+(PWASSEMBLE => {
+  console.log(PWASSEMBLE.TEMPLATE_PREFIX, 'Template loaded:',
+      PWASSEMBLE.instance.template);
 
   const form = document.querySelector('#form');
   form.addEventListener('submit', submitEvent => {
@@ -15,5 +15,5 @@
     PWASSEMBLE.serviceWorkerRegistration.showNotification(title, options);
     return false;
   });
-})();
+})(window.PWASSEMBLE || {});
 

@@ -1,13 +1,13 @@
 /* eslint "require-jsdoc": 0 */
-(() => {
-  var PWASSEMBLE = window.PWASSEMBLE || {};
-  console.log('🍀 Template loaded.', PWASSEMBLE.instance.template);
+(PWASSEMBLE => {
+  console.log(PWASSEMBLE.TEMPLATE_PREFIX, 'Template loaded:',
+      PWASSEMBLE.instance.template);
 
   function getFeed(url) {
     return fetch(`./feeds?url=${encodeURIComponent(url)}`)
     .then(response => {
       if (!response.ok) {
-        return Response.error();
+        throw Error('Feed fetch error');
       }
       return response.text()
       // Rewrite non-http links and proxy them locally
@@ -83,6 +83,6 @@
     }
   })
   .catch(error => {
-    console.log(error);
+    console.log(PWASSEMBLE.TEMPLATE_PREFIX, error);
   });
-})();
+})(window.PWASSEMBLE || {});
