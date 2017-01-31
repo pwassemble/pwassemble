@@ -1,31 +1,35 @@
 (PWASSEMBLE => {
   PWASSEMBLE.templateLoader = {
     create() {
-      let pushNotificationsButton;
+      let pushNotificationsCheckbox;
+      let pushNotificationsLabel;
+      let pushNotificationsToggle;
 
-      const updatePushNotificationsButton = () => {
+      const updatePushNotificationsCheckbox = () => {
         if (!('Notification' in window)) {
           return;
         }
         if (Notification.permission === 'denied') {
-          pushNotificationsButton.textContent = 'Push Messaging Blocked.';
-          pushNotificationsButton.disabled = true;
+          pushNotificationsLabel.textContent = 'Notifications blocked';
+          pushNotificationsCheckbox.disabled = true;
           return;
         }
         if (PWASSEMBLE.isSubscribed) {
+          pushNotificationsCheckbox.checked = true;
           if (PWASSEMBLE.DEBUG_MODE) {
             console.log(PWASSEMBLE.DEBUG_PREFIX,
                 'User is subscribed to push notifications');
           }
-          pushNotificationsButton.textContent = 'Disable Push Notifications';
+          pushNotificationsLabel.textContent = 'Notifications on';
         } else {
+          pushNotificationsCheckbox.checked = false;
           if (PWASSEMBLE.DEBUG_MODE) {
             console.log(PWASSEMBLE.DEBUG_PREFIX,
                 'User not subscribed to push notifications');
           }
-          pushNotificationsButton.textContent = 'Enable Push Notifications';
+          pushNotificationsLabel.textContent = 'Notifications off';
         }
-        pushNotificationsButton.disabled = false;
+        pushNotificationsCheckbox.disabled = false;
       };
 
       const optInPushNotifications = () => {
@@ -44,14 +48,14 @@
                 'Subscribed to push notifications at endpoint', endpoint);
           }
           PWASSEMBLE.isSubscribed = true;
-          return updatePushNotificationsButton();
+          return updatePushNotificationsCheckbox();
         })
         .catch(subscriptionError => {
           if (PWASSEMBLE.DEBUG_MODE) {
             console.log(PWASSEMBLE.DEBUG_PREFIX,
                 'Could not subscribe to push notifications', subscriptionError);
           }
-          pushNotificationsButton.disabled = false;
+          pushNotificationsCheckbox.disabled = false;
         });
       };
 
@@ -67,7 +71,7 @@
         .then(() => {
           console.log(PWASSEMBLE.DEBUG_PREFIX, 'User is unsubscribed.');
           PWASSEMBLE.isSubscribed = false;
-          return updatePushNotificationsButton();
+          return updatePushNotificationsCheckbox();
         })
         .catch(error => {
           console.log('Error unsubscribing', error);
@@ -95,18 +99,25 @@
         html.innerHTML = results[0];
         if ('PushManager' in window) {
           // Push notifications
-          pushNotificationsButton = document.createElement('button');
-          pushNotificationsButton.id = 'pushNotificationsButton';
-          pushNotificationsButton.disabled = true;
-          html.appendChild(pushNotificationsButton);
-          pushNotificationsButton.addEventListener('click', () => {
-            pushNotificationsButton.disabled = true;
+          pushNotificationsCheckbox = document.createElement('input');
+          pushNotificationsCheckbox.type = 'checkbox';
+          pushNotificationsCheckbox.id = 'pushNotificationsCheckbox';
+          pushNotificationsLabel = document.createElement('label');
+          pushNotificationsLabel.htmlFor = pushNotificationsCheckbox.id;
+          pushNotificationsCheckbox.disabled = true;
+          pushNotificationsToggle = document.createElement('div');
+          pushNotificationsToggle.id = 'pushNotificationsToggle';
+          pushNotificationsToggle.appendChild(pushNotificationsCheckbox);
+          pushNotificationsToggle.appendChild(pushNotificationsLabel);
+          html.appendChild(pushNotificationsToggle);
+          pushNotificationsCheckbox.addEventListener('click', () => {
+            pushNotificationsCheckbox.disabled = true;
             if (PWASSEMBLE.isSubscribed) {
               return optOutPushNotifications();
             }
             return optInPushNotifications();
           });
-          updatePushNotificationsButton();
+          updatePushNotificationsCheckbox();
         }
         // CSS
         const style = document.createElement('style');

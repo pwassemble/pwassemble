@@ -18,4 +18,9 @@
   };
   fontColor.addEventListener('change', updateFontColor);
   fontColor.addEventListener('input', updateFontColor);
+
+  if ('PushManager' in window) {
+    document.querySelector('nav').appendChild(
+        document.querySelector('#pushNotificationsToggle'));
+  }
 })(window.PWASSEMBLE || {});

@@ -85,4 +85,9 @@
   .catch(error => {
     console.log(PWASSEMBLE.TEMPLATE_PREFIX, error);
   });
+
+  if ('PushManager' in window) {
+    document.querySelector('nav').appendChild(
+        document.querySelector('#pushNotificationsToggle'));
+  }
 })(window.PWASSEMBLE || {});

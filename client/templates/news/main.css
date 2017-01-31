@@ -73,6 +73,11 @@ nav a {
   font-size: .75rem;
 }
 
+#pushNotificationsToggle {
+  color: white;
+  padding-left: .5rem;
+}
+
 article {
   background: rgba(255, 255, 255, .95);
   margin: .5rem;

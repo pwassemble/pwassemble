@@ -15,5 +15,10 @@
     PWASSEMBLE.serviceWorkerRegistration.showNotification(title, options);
     return false;
   });
+
+  if ('PushManager' in window) {
+    document.querySelector('nav').appendChild(
+        document.querySelector('#pushNotificationsToggle'));
+  }
 })(window.PWASSEMBLE || {});
 

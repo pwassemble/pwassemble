@@ -76,6 +76,15 @@ nav a {
   padding: .25rem;
 }
 
+#pushNotificationsToggle {
+  color: white;
+  padding-left: .5rem;
+}
+
+#pushNotificationsToggle input {
+  width: initial;
+}
+
 form {
   background-color: white;
   padding: .5rem;
