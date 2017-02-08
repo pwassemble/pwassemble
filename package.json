@@ -27,16 +27,17 @@
   },
   "homepage": "https://github.com/tomayac/pwassemble#readme",
   "dependencies": {
-    "autoprefixer": "^6.5.3",
-    "babel-core": "^6.18.2",
-    "babel-preset-babili": "^0.0.9",
+    "amazon-products-api": "0.0.4",
+    "autoprefixer": "^6.7.2",
+    "babel-core": "^6.22.1",
+    "babel-preset-babili": "^0.0.10",
     "compression": "^1.6.2",
-    "cssnano": "^3.8.1",
-    "express": "^4.14.0",
-    "feedparser": "^1.1.5",
-    "file-type": "^3.9.0",
-    "fs-extra": "^1.0.0",
-    "html-minifier": "^3.2.3",
+    "cssnano": "^3.10.0",
+    "express": "^4.14.1",
+    "feedparser": "^2.1.0",
+    "file-type": "^4.1.0",
+    "fs-extra": "^2.0.0",
+    "html-minifier": "^3.3.1",
     "imagemin": "^5.2.2",
     "imagemin-gifsicle": "^5.1.0",
     "imagemin-jpegtran": "^5.0.2",
@@ -44,13 +45,15 @@
     "imagemin-svgo": "^5.2.0",
     "imagemin-webp": "^4.0.0",
     "imagemin-zopfli": "^5.0.0",
-    "postcss": "^5.2.6",
+    "node-env-file": "^0.1.8",
+    "postcss": "^5.2.12",
     "request": "^2.79.0",
-    "sharp": "^0.16.2"
+    "sharp": "^0.17.1",
+    "unfluff": "^1.1.0"
   },
   "devDependencies": {
-    "eslint": "^3.6.0",
-    "eslint-config-google": "^0.6.0"
+    "eslint": "^3.15.0",
+    "eslint-config-google": "^0.7.1"
   },
   "eslintConfig": {
     "extends": "google",

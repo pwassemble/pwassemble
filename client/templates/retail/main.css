@@ -1,5 +1,4 @@
 html, body {
-  background-color: black;
   font-size: 14pt;
 }
 
@@ -40,10 +39,10 @@ nav a {
 }
 
 #container {
-  background: rgba(0, 0, 0, 0) url(${PWASSEMBLE.instance.heroImgId}) no-repeat scroll 0% 0% / cover padding-box border-box;
   display: flex;
   flex-direction: column;
   height: 100vh;
+  width: 100vw;
   margin: 0;
   position: relative;
 }
@@ -77,50 +76,81 @@ nav a {
   padding-left: .5rem;
 }
 
-article {
-  background: rgba(255, 255, 255, .95);
-  margin: .5rem;
-  hypens: auto;
-  padding: .5rem;
-  line-height: 1.5;
-  letter-spacing: 0.01rem;
-  font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
+form {
+  background: rgba(0, 0, 0, 0) url(${PWASSEMBLE.instance.heroImgId}) no-repeat scroll 0% 0% / cover padding-box border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 5rem;
+  position: sticky;
+  top: 0;
 }
 
-@media (max-width: 500px) {
-  article header a {
-    font-size: .75rem;
-  }
+form div {
+  display: flex;
+  justify-content: center;
 }
 
-article header a {
-  font-weight: bold;
-  text-decoration: none;
-}
-
-article section {
-  font-family: serif;
-}
-
-article section a {
-  color: black;
-}
-
-@media (max-width: 1000px) {
-  article img, video, figure, div, p, a, iframe {
-    max-width: 100% !important;
-  }
-}
-@media (min-width: 1001px) {
-  article img, video, figure, div, p, a, iframe {
-    max-width: 1000px !important;
-  }
-}
-
-article footer {
-  border-top: 1px solid var(--colorFgPrimary);
+form input {
   font-size: .75rem;
+  font-weight: lighter;
+  color: var(--colorFgSecondary);
+  background-color: rgba(255,255,255,.75);
+  border-right: none;
+  border-left: solid black 1px;
+  border-top: solid black 1px;
+  border-bottom: solid black 1px;
+  padding: .25rem;
+  width: 80%;
+  height: 2.5rem;
+}
+
+form button {
+  font-size: .75rem;
+  color: var(--colorFgPrimary);
+  background-color: var(--colorBgPrimary);
+  border-left: none;
+  border-right: solid black 1px;
+  border-top: solid black 1px;
+  border-bottom: solid black 1px;
+  height: 2.5rem;
+  width: 10%;
+}
+
+#products {
+  background-color: white;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+#products figure {
+  background-color: white;
+  border: solid var(--colorFgSecondary) 1px;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  margin: .25rem;
+  text-align: center;
+  width: 5rem;
+}
+
+#products figure img {
+  height: 10vh;
+  margin: .1rem;
+  width: auto;
+}
+
+#products figure figcaption {
+  background-color: var(--colorBgPrimary);
+  color: var(--colorFgPrimary);
+  font-size: .6rem;
+  font-weight: light;
+  flex-grow: 1;
+  max-height: 3rem;
+  text-align: center;
+  overflow: hidden;
+  padding: .25rem;
 }
 
 .open-menu, .close-menu {

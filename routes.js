@@ -1,10 +1,18 @@
 'use strict';
 
+const path = require('path');
+const env = require('node-env-file');
+env(path.join(__dirname, '.env'), {raise: false});
 const FeedParser = require('feedparser');
 const request = require('request');
 const sharp = require('sharp');
 const imagemin = require('imagemin');
 const fileType = require('file-type');
+const products = require('amazon-products-api')({
+  AccessKey: process.env.AMAZON_ACCESS_KEY_ID,
+  SecretKey: process.env.AMAZON_SECRET_ACCESS_KEY,
+  Tag: process.env.AMAZON_ASSOCIATE_TAG
+});
 
 const routes = {
   hello(req, res) {
@@ -114,6 +122,27 @@ const routes = {
     const base64 = req.query.base64;
     res.set('Content-Type', 'application/manifest+json');
     return res.send(new Buffer(base64, 'base64').toString());
+  },
+
+  products(req, res) {
+    products.operation('ItemSearch', {
+      SearchIndex: req.query.category ? req.query.category : 'All',
+      Keywords: req.query.query,
+      ResponseGroup: 'Images,ItemAttributes'
+    })
+    .then(response => {
+      const json = response.Items.Item.map(item => {
+        return {
+          url: `./proxy?url=${encodeURIComponent(item.DetailPageURL)}`,
+          image: `./proxy?url=${encodeURIComponent(item.LargeImage.URL)}`,
+          name: item.ItemAttributes.Title
+        };
+      });
+      return res.send(json);
+    })
+    .catch(error => {
+      return res.sendStatus(404);
+    });
   }
 };
 

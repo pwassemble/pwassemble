@@ -32,6 +32,7 @@ app.get('/assets', routes.assets);
 app.get('/manifests', routes.manifests);
 app.get('/proxy', routes.proxy);
 app.get('/optimize', routes.optimize);
+app.get('/products', routes.products);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
