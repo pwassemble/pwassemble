@@ -28,6 +28,10 @@ return e.forEach(function(e){n[++t]=e}),n}e.exports=n},function(e,t){function n(
   const queryInput = document.querySelector('#query');
   const cameraButton = document.querySelector('#camera');
 
+  const showFallbackImage = (imgErrorEvent) => {
+    imgErrorEvent.target.src = `${location.origin}/static/offline.svg`;
+  };
+
   const searchProduct =
       (query, category = PWASSEMBLE.instance.productCategory) => {
     if (!query) {
@@ -52,6 +56,9 @@ return e.forEach(function(e){n[++t]=e}),n}e.exports=n},function(e,t){function n(
             </figure>`.replace(/\n\s*/gim, ' ');
       }).join('\n');
       productsDiv.innerHTML = html;
+      for (let img of productsDiv.querySelectorAll('img')) {
+        img.addEventListener('error', showFallbackImage);
+      }
     })
     .catch((error) => {
       products.innerHTML = '😢 No products found.';
