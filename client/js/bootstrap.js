@@ -1,13 +1,13 @@
-var PWASSEMBLE = {
+window.PWASSEMBLE = {
   DEBUG_MODE: true,
   DEBUG_PREFIX: '🕸',
   TEMPLATE_PREFIX: '🍀',
   isSubscribed: null,
   instance: null,
-  serviceWorkerRegistration: null
+  serviceWorkerRegistration: null,
 };
 
-(PWASSEMBLE => {
+((PWASSEMBLE) => {
   PWASSEMBLE.init = () => {
     const body = document.body;
     const head = document.head;
@@ -22,13 +22,13 @@ var PWASSEMBLE = {
         vibrate: [200, 100, 200, 100, 200, 100, 400],
         actions: [
           {action: 'yes', title: 'Yes', icon: './static/yes.png'},
-          {action: 'no', title: 'No', icon: './static/no.png'}
-        ]
+          {action: 'no', title: 'No', icon: './static/no.png'},
+        ],
       };
       const imgs = document.querySelectorAll('img');
       const showNotification = () => {
         PWASSEMBLE.serviceWorkerRegistration.pushManager.getSubscription()
-        .then(subscription => {
+        .then((subscription) => {
           if (subscription) {
             PWASSEMBLE.serviceWorkerRegistration.showNotification(title,
                 options);
@@ -37,7 +37,7 @@ var PWASSEMBLE = {
                 'Push notification permission not granted');
           }
         })
-        .catch(notificationError => {
+        .catch((notificationError) => {
           if (PWASSEMBLE.DEBUG_MODE) {
             console.log(PWASSEMBLE.DEBUG_PREFIX,
                 'Push notification permission not granted', notificationError);
@@ -68,7 +68,7 @@ var PWASSEMBLE = {
     };
 
     PWASSEMBLE.instanceLoader.load()
-    .then(instance_ => {
+    .then((instance_) => {
       PWASSEMBLE.instance = instance_;
       PWASSEMBLE.instance.companyName = PWASSEMBLE.instance.companyName
           .replace(/\+/g, ' ');
@@ -89,7 +89,7 @@ var PWASSEMBLE = {
         icon: PWASSEMBLE.instance.iconImgId,
         themeColor: PWASSEMBLE.instance.colorFgPrimary,
         backgroundColor: PWASSEMBLE.instance.colorBgPrimary,
-        startUrl: `${location.origin}/?id=${PWASSEMBLE.instance.pwaInstanceId}`
+        startUrl: `${location.origin}/?id=${PWASSEMBLE.instance.pwaInstanceId}`,
       };
       const manifestUrl = `${location.origin}/manifests?base64=${
           btoa(PWASSEMBLE.manifestCreator.create(manifestObject))}`;
@@ -107,7 +107,7 @@ var PWASSEMBLE = {
         const value = PWASSEMBLE.instance[key];
         if (key === 'iconImgId') {
           head.appendChild(createLink('icon', value));
-          ['76', '120', '152'].map(size => {
+          ['76', '120', '152'].map((size) => {
             return head.appendChild(createLink('apple-touch-icon',
                 `./assets?url=${
                 encodeURIComponent(value)}&width=${size}&height=${size}`,
@@ -130,7 +130,7 @@ var PWASSEMBLE = {
       // Create content
       return PWASSEMBLE.templateLoader.create();
     })
-    .then(content => {
+    .then((content) => {
       fragment.appendChild(content.html);
       head.appendChild(content.css);
       body.appendChild(fragment);
@@ -142,8 +142,8 @@ var PWASSEMBLE = {
         setUpPushNotifications(PWASSEMBLE.instance);
       }
     })
-    .catch(error => {
+    .catch((error) => {
       throw error;
     });
   };
-})(PWASSEMBLE);
+})(window.PWASSEMBLE || {});

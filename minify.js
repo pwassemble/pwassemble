@@ -1,21 +1,21 @@
 const fs = require('fs');
 const fse = require('fs-extra');
 const path = require('path');
-const babel = require("babel-core");
+const babel = require('babel-core');
 const postcss = require('postcss');
 const htmlMinifier = require('html-minifier').minify;
 
 const CREATE_SOURCE_MAPS = false;
 
-const ls = start => {
+const ls = (start) => {
   return new Promise((resolve, reject) => {
     fs.readdir(start, (err, files) => {
       if (err) {
         return reject(err);
       }
       // Don't return hidden files
-      files = files.filter(name => !/^\./.test(name));
-      return resolve(files.map(file => path.join(start, file)));
+      files = files.filter((name) => !/^\./.test(name));
+      return resolve(files.map((file) => path.join(start, file)));
     });
   });
 };
@@ -36,7 +36,7 @@ const minifyHtml = (code, destFile, returnHtml = false) => {
     sortAttributes: true,
     sortClassName: true,
     trimCustomFragments: true,
-    useShortDoctype: true
+    useShortDoctype: true,
   });
   if (returnHtml) {
     return {result, destFile};
@@ -49,7 +49,7 @@ const minifyJs = (code, destFile) => {
     sourceMaps: CREATE_SOURCE_MAPS,
     presets: ['babili'],
     comments: false,
-    minified: true
+    minified: true,
   });
   fs.writeFileSync(destFile, result.code);
   if (CREATE_SOURCE_MAPS) {
@@ -63,11 +63,11 @@ const minifyCss = (code, file, destFile, returnCss = false) => {
     from: file,
     to: destFile,
     discardComments: {
-      removeAll: true
+      removeAll: true,
     },
-    map: CREATE_SOURCE_MAPS ? {inline: false} : false
+    map: CREATE_SOURCE_MAPS ? {inline: false} : false,
   })
-  .then(result => {
+  .then((result) => {
     if (returnCss) {
       return result.css;
     }
@@ -84,12 +84,12 @@ const minify = {
     const distDir = path.join(__dirname, 'client', 'dist', 'templates');
     fse.emptyDirSync(distDir);
     ls(templatesDir)
-    .then(templates => Promise.all(templates.map(file => ls(file))))
-    .then(results => {
-      results.forEach(templateDir => {
+    .then((templates) => Promise.all(templates.map((file) => ls(file))))
+    .then((results) => {
+      results.forEach((templateDir) => {
         let templateFiles = [];
         let templateDirectories = [];
-        templateDir.forEach(object => {
+        templateDir.forEach((object) => {
           if (fs.lstatSync(object).isDirectory()) {
             templateDirectories.push(object);
           } else {
@@ -97,7 +97,7 @@ const minify = {
           }
         });
         // Minify top-level files
-        templateFiles.forEach(file => {
+        templateFiles.forEach((file) => {
           const extension = path.extname(file);
           const destFile = file.replace('templates', 'dist/templates')
               .replace(extension, `.min${extension}`);
@@ -115,24 +115,40 @@ const minify = {
           }
         });
         // Leave directories alone, assuming they are already minified
-        templateDirectories.forEach(directory => {
+        templateDirectories.forEach((directory) => {
           const destDir = directory.replace('templates', 'dist');
           fse.copy(directory, destDir);
         });
       });
     })
-    .catch(error => {
+    .catch((error) => {
       throw error;
     });
   },
 
   minifyStatic() {
+    try {
+      let nodeModules = path.join(__dirname, 'node_modules');
+      let clientLibs = path.join(__dirname, 'client', 'libs');
+      fse.copySync(
+          path.join(nodeModules, 'idb-keyval', 'idb-keyval.js'),
+          path.join(clientLibs, 'idb-keyval.js'));
+      fse.copySync(
+          path.join(nodeModules, 'url-search-params', 'build',
+              'url-search-params.max.js'),
+          path.join(clientLibs, 'url-search-params.js'));
+      fse.copySync(
+          path.join(nodeModules, 'whatwg-fetch', 'fetch.js'),
+          path.join(clientLibs, 'fetch.js'));
+    } catch (error) {
+      throw error;
+    }
     const staticDir = path.join(__dirname, 'client');
     const distDir = path.join(__dirname, 'client', 'dist');
     let rootFiles = [];
     ls(staticDir)
-    .then(files => {
-      let directories = files.filter(file => {
+    .then((files) => {
+      let directories = files.filter((file) => {
         if (fs.lstatSync(file).isDirectory() && /css|js|libs$/.test(file)) {
           return true;
         }
@@ -141,15 +157,15 @@ const minify = {
         }
         return false;
       });
-      return Promise.all(directories.map(file => ls(file)));
+      return Promise.all(directories.map((file) => ls(file)));
     })
-    .then(results => {
+    .then((results) => {
       results.push(rootFiles);
       let jsFiles = [];
       let cssFiles = [];
       let indexHtml;
-      results.forEach(directory => {
-        directory.forEach(file => {
+      results.forEach((directory) => {
+        directory.forEach((file) => {
           const extension = path.extname(file);
           // All destination files should have a ".min." suffix, except
           // index.html
@@ -157,7 +173,7 @@ const minify = {
               .replace(extension, (extension === '.html' ?
               extension : `.min${extension}`));
           const destDir = path.dirname(destFile);
-          if (!/libs$/.test(destDir) && !fs.existsSync(destDir)) {
+          if (!/libs|css$/.test(destDir) && !fs.existsSync(destDir)) {
             fs.mkdirSync(destDir);
           }
           if (/\.js$/.test(file)) {
@@ -177,27 +193,27 @@ const minify = {
       });
       // Bundle all JavaScript
       let jsCodes = [];
-      jsFiles.map(file => jsCodes.push(
+      jsFiles.map((file) => jsCodes.push(
           fs.readFileSync(file, {encoding: 'utf8'})));
       minifyJs(jsCodes.join('\n'), path.join(distDir, 'js', 'bundle.min.js'));
       // Bundle all CSS
       let cssCodes = [];
-      cssFiles.map(file => cssCodes.push(
+      cssFiles.map((file) => cssCodes.push(
           fs.readFileSync(file, {encoding: 'utf8'})));
       // Inline bundled CSS
       minifyCss(cssCodes.join('\n'),
           path.join(distDir, 'css', 'bundle.css'),
           path.join(distDir, 'css', 'bundle.min.css'), true)
-      .then(css => {
+      .then((css) => {
         const html = indexHtml.result.replace(/<style>.*?<\/style>/,
             `<style>${css}</style>`);
         fs.writeFileSync(indexHtml.destFile, html);
       });
     })
-    .catch(error => {
+    .catch((error) => {
       throw error;
     });
-  }
+  },
 };
 
 module.exports = minify;

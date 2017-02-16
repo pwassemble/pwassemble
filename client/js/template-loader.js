@@ -1,4 +1,4 @@
-(PWASSEMBLE => {
+((PWASSEMBLE) => {
   PWASSEMBLE.templateLoader = {
     create() {
       let pushNotificationsCheckbox;
@@ -39,9 +39,9 @@
               'Subscribing to push notifications');
         }
         return PWASSEMBLE.serviceWorkerRegistration.pushManager.subscribe({
-          userVisibleOnly: true
+          userVisibleOnly: true,
         })
-        .then(subscription => {
+        .then((subscription) => {
           const endpoint = subscription.endpoint.replace(GCM_API_URL, '');
           if (PWASSEMBLE.DEBUG_MODE) {
             console.log(PWASSEMBLE.DEBUG_PREFIX,
@@ -50,7 +50,7 @@
           PWASSEMBLE.isSubscribed = true;
           return updatePushNotificationsCheckbox();
         })
-        .catch(subscriptionError => {
+        .catch((subscriptionError) => {
           if (PWASSEMBLE.DEBUG_MODE) {
             console.log(PWASSEMBLE.DEBUG_PREFIX,
                 'Could not subscribe to push notifications', subscriptionError);
@@ -61,9 +61,9 @@
 
       const optOutPushNotifications = () => {
         PWASSEMBLE.serviceWorkerRegistration.pushManager.subscribe({
-          userVisibleOnly: true
+          userVisibleOnly: true,
         })
-        .then(subscription => {
+        .then((subscription) => {
           if (subscription) {
             return subscription.unsubscribe();
           }
@@ -73,26 +73,26 @@
           PWASSEMBLE.isSubscribed = false;
           return updatePushNotificationsCheckbox();
         })
-        .catch(error => {
+        .catch((error) => {
           console.log('Error unsubscribing', error);
         });
       };
 
       return Promise.all([
         fetch(`./templates/${PWASSEMBLE.instance.template}/main.min.html`)
-          .then(response => response.ok ? response.text() : '')
+          .then((response) => response.ok ? response.text() : '')
           // Remove comments (not the content, just the comment markers)
-          .then(text => text.replace(/<!--/g, '').replace(/-->/g, ''))
+          .then((text) => text.replace(/<!--/g, '').replace(/-->/g, ''))
           // eslint-disable-next-line no-eval
-          .then(text => eval('`' + text + '`')),
+          .then((text) => eval('`' + text + '`')),
         fetch(`./templates/${PWASSEMBLE.instance.template}/main.min.css`)
-          .then(response => response.ok ? response.text() : '')
+          .then((response) => response.ok ? response.text() : '')
           // eslint-disable-next-line no-eval
-          .then(text => eval('`' + text + '`')),
+          .then((text) => eval('`' + text + '`')),
         fetch(`./templates/${PWASSEMBLE.instance.template}/main.min.js`)
-          .then(response => response.ok ? response.text() : '')
+          .then((response) => response.ok ? response.text() : ''),
       ])
-      .then(results => {
+      .then((results) => {
         // HTML container
         const html = document.createElement('div');
         html.id = 'container';
@@ -128,10 +128,10 @@
         return {
           html: html,
           css: style,
-          js: js
+          js: js,
         };
       })
-      .catch(fetchError => Promise.reject(fetchError));
-    }
+      .catch((fetchError) => Promise.reject(fetchError));
+    },
   };
 })(window.PWASSEMBLE || {});

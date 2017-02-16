@@ -1,4 +1,4 @@
-(PWASSEMBLE => {
+((PWASSEMBLE) => {
   PWASSEMBLE.manifestCreator = {
     create(manifestObject) {
       const sizes = [48, 72, 76, 96, 120, 128, 144, 152, 168, 192, 256, 512];
@@ -10,7 +10,7 @@
             "display": "${manifestObject.display ?
                 manifestObject.display : 'standalone'}",
             "icons": [
-              ${sizes.map(size => {
+              ${sizes.map((size) => {
                 return `{
                   "src": "${location.origin}/assets?url=${
                       encodeURIComponent(manifestObject.icon)
@@ -28,6 +28,6 @@
             "dir": "${manifestObject.dir ? manifestObject.dir : 'ltr'}",
             "gcm_sender_id": "884875544344"
           }`), null, 2);
-    }
+    },
   };
 })(window.PWASSEMBLE || {});

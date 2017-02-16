@@ -1,5 +1,5 @@
 /* eslint "require-jsdoc": 0 */
-(PWASSEMBLE => {
+((PWASSEMBLE) => {
   console.log(PWASSEMBLE.TEMPLATE_PREFIX, 'Template loaded:',
       PWASSEMBLE.instance.template);
   const shirtColor = document.querySelector('#shirt-color');

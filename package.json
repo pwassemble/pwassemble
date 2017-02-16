@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint ."
+    "lint": "eslint . --fix"
   },
   "repository": {
     "type": "git",
@@ -28,16 +28,18 @@
   "homepage": "https://github.com/tomayac/pwassemble#readme",
   "dependencies": {
     "amazon-products-api": "0.0.4",
-    "autoprefixer": "^6.7.2",
-    "babel-core": "^6.22.1",
-    "babel-preset-babili": "^0.0.10",
+    "autoprefixer": "^6.7.3",
+    "babel-core": "^6.23.1",
+    "babel-preset-babili": "^0.0.11",
     "compression": "^1.6.2",
     "cssnano": "^3.10.0",
     "express": "^4.14.1",
     "feedparser": "^2.1.0",
     "file-type": "^4.1.0",
     "fs-extra": "^2.0.0",
+    "helmet": "^3.4.0",
     "html-minifier": "^3.3.1",
+    "idb-keyval": "^2.3.0",
     "imagemin": "^5.2.2",
     "imagemin-gifsicle": "^5.1.0",
     "imagemin-jpegtran": "^5.0.2",
@@ -46,18 +48,26 @@
     "imagemin-webp": "^4.0.0",
     "imagemin-zopfli": "^5.0.0",
     "node-env-file": "^0.1.8",
-    "postcss": "^5.2.12",
+    "postcss": "^5.2.13",
     "request": "^2.79.0",
-    "sharp": "^0.17.1",
-    "unfluff": "^1.1.0"
+    "sharp": "^0.17.2",
+    "unfluff": "^1.1.0",
+    "url-search-params": "^0.6.1",
+    "whatwg-fetch": "^2.0.2"
   },
   "devDependencies": {
     "eslint": "^3.15.0",
     "eslint-config-google": "^0.7.1"
   },
   "eslintConfig": {
-    "extends": "google",
+    "parserOptions": {
+      "ecmaVersion": 7
+    },
+    "extends": [
+      "google"
+    ],
     "env": {
+      "es6": true,
       "browser": true,
       "serviceworker": true,
       "node": true

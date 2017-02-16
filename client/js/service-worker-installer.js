@@ -1,4 +1,4 @@
-(PWASSEMBLE => {
+((PWASSEMBLE) => {
   PWASSEMBLE.serviceWorkerInstaller = {
     install() {
       if (!('serviceWorker' in navigator)) {
@@ -9,7 +9,7 @@
       }
       // Register the Service Worker
       return navigator.serviceWorker.register('service-worker.min.js')
-      .then(serviceWorkerRegistration_ => {
+      .then((serviceWorkerRegistration_) => {
         return navigator.serviceWorker.ready
         .then(function(serviceWorkerRegistration_) {
           PWASSEMBLE.serviceWorkerRegistration = serviceWorkerRegistration_;
@@ -30,7 +30,7 @@
           }
           return navigator.serviceWorker.controller.postMessage({
             command: 'cache-self',
-            url: url
+            url: url,
           }, [messageChannel.port2]);
         }
         return true;
@@ -61,7 +61,7 @@
         }
         return PWASSEMBLE.serviceWorkerRegistration.pushManager
             .getSubscription()
-        .then(subscription => {
+        .then((subscription) => {
           if (subscription) {
             PWASSEMBLE.isSubscribed = true;
           } else {
@@ -74,11 +74,11 @@
           return PWASSEMBLE.serviceWorkerRegistration;
         });
       })
-      .catch(err => {
+      .catch((err) => {
         if (PWASSEMBLE.DEBUG_MODE) {
           console.error(PWASSEMBLE.DEBUG_PREFIX, err);
         }
       });
-    }
+    },
   };
 })(window.PWASSEMBLE || {});

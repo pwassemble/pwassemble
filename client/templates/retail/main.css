@@ -2,6 +2,10 @@ html, body {
   font-size: 14pt;
 }
 
+h1 {
+  padding: .25rem;
+}
+
 nav {
   position: absolute;
   height: 100%;

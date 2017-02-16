@@ -11,7 +11,7 @@ const fileType = require('file-type');
 const products = require('amazon-products-api')({
   AccessKey: process.env.AMAZON_ACCESS_KEY_ID,
   SecretKey: process.env.AMAZON_SECRET_ACCESS_KEY,
-  Tag: process.env.AMAZON_ASSOCIATE_TAG
+  Tag: process.env.AMAZON_ASSOCIATE_TAG,
 });
 
 const routes = {
@@ -23,16 +23,16 @@ const routes = {
     const url = req.query.url;
     const feedRequest = request({
       url: url,
-      gzip: true
+      gzip: true,
     });
     const feedParser = new FeedParser({
       addmeta: true,
-      normalize: true
+      normalize: true,
     });
     let items = [];
 
     feedRequest.on('error', () => res.sendStatus(500));
-    feedRequest.on('response', response => {
+    feedRequest.on('response', (response) => {
       if (response.statusCode !== 200) {
         return feedRequest.emit('error', new Error('Bad status code'));
       }
@@ -53,7 +53,7 @@ const routes = {
     const {url, width, height} = req.query;
     request(url, {
       encoding: null,
-      gzip: true
+      gzip: true,
     }, (error, response, body) => {
       if (error || response.statusCode !== 200) {
         return res.sendStatus(500);
@@ -62,7 +62,7 @@ const routes = {
       .resize(parseInt(width, 10), parseInt(height, 10))
       .png()
       .toBuffer()
-      .then(outputBuffer => {
+      .then((outputBuffer) => {
         res.set('Content-Type', 'image/png');
         return res.send(outputBuffer);
       })
@@ -74,7 +74,7 @@ const routes = {
     const input = req.query.url;
     request(input, {
       encoding: null,
-      gzip: true
+      gzip: true,
     }, (error, response, body) => {
       if (error || response.statusCode !== 200) {
         return res.sendStatus(500);
@@ -84,7 +84,7 @@ const routes = {
         require('imagemin-gifsicle')(),
         require('imagemin-jpegtran')(),
         require('imagemin-optipng')(),
-        require('imagemin-zopfli')({more: true})
+        require('imagemin-zopfli')({more: true}),
       ];
       // If the user agent accepts WebP send it
       const acceptHeader = req.headers.accept || '';
@@ -92,7 +92,7 @@ const routes = {
         plugins.push(require('imagemin-webp')());
       }
       imagemin.buffer(body, {plugins: plugins})
-      .then(outputBuffer => {
+      .then((outputBuffer) => {
         res.set('Content-Type', fileType(outputBuffer).mime);
         return res.send(outputBuffer);
       })
@@ -104,7 +104,7 @@ const routes = {
     const url = req.query.url;
     request(url, {
       gzip: true,
-      encoding: null
+      encoding: null,
     }, (error, response, body) => {
       if (error || response.statusCode !== 200) {
         return res.sendStatus(404);
@@ -112,7 +112,7 @@ const routes = {
       res.set({
         'Content-Type': response.headers['Content-Type'],
         'Cache-Control': response.headers['Cache-Control'] ?
-            response.headers['Cache-Control'] : 'max-age=3600'
+            response.headers['Cache-Control'] : 'max-age=3600',
       });
       return res.send(body);
     });
@@ -128,22 +128,22 @@ const routes = {
     products.operation('ItemSearch', {
       SearchIndex: req.query.category ? req.query.category : 'All',
       Keywords: req.query.query,
-      ResponseGroup: 'Images,ItemAttributes'
+      ResponseGroup: 'Images,ItemAttributes',
     })
-    .then(response => {
-      const json = response.Items.Item.map(item => {
+    .then((response) => {
+      const json = response.Items.Item.map((item) => {
         return {
           url: `./proxy?url=${encodeURIComponent(item.DetailPageURL)}`,
           image: `./proxy?url=${encodeURIComponent(item.LargeImage.URL)}`,
-          name: item.ItemAttributes.Title
+          name: item.ItemAttributes.Title,
         };
       });
       return res.send(json);
     })
-    .catch(error => {
+    .catch((error) => {
       return res.sendStatus(404);
     });
-  }
+  },
 };
 
 module.exports = routes;

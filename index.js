@@ -13,6 +13,7 @@ minify.minifyStatic();
 optimize.optimizeStatic();
 
 app.use(compression({threshold: 0}));
+app.use(require('helmet')());
 
 /* Enforce HTTPS on Heroku */
 app.get('*', (req, res, next) => {

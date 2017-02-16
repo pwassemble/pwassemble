@@ -1,5 +1,5 @@
 /* global idbKeyval, firebase */
-(PWASSEMBLE => {
+((PWASSEMBLE) => {
   PWASSEMBLE.instanceLoader = {
     load() {
       return new Promise((resolve, reject) => {
@@ -14,7 +14,7 @@
           console.log(PWASSEMBLE.DEBUG_PREFIX, 'Instance ID', id);
         }
         idbKeyval.get(id)
-        .then(instance => {
+        .then((instance) => {
           if (instance) {
             if (PWASSEMBLE.DEBUG_MODE) {
               console.log(PWASSEMBLE.DEBUG_PREFIX,
@@ -26,7 +26,7 @@
             apiKey: 'AIzaSyCmQzeCh9nFg5SCwbfsPDkpigwat_fuW68',
             authDomain: 'pwassemble-1337.firebaseapp.com',
             databaseURL: 'https://pwassemble-1337.firebaseio.com',
-            storageBucket: 'pwassemble-1337.appspot.com'
+            storageBucket: 'pwassemble-1337.appspot.com',
           };
           firebase.initializeApp(config);
           const db = firebase.database();
@@ -34,8 +34,8 @@
 
           return db.ref(`/instances/${id}`)
           .once('value')
-          .then(snapshot => snapshot.val())
-          .then(results => {
+          .then((snapshot) => snapshot.val())
+          .then((results) => {
             if (!results) {
               return reject(`Could not find instance ${id}`);
             }
@@ -43,9 +43,9 @@
             const dynamicComponents = [
               'companyLogoImgId',
               'heroImgId',
-              'iconImgId'
+              'iconImgId',
             ];
-            dynamicComponents.forEach(dynamicComponent => {
+            dynamicComponents.forEach((dynamicComponent) => {
               let dynamicKey = false;
               if ((dynamicComponent === 'companyLogoImgId') &&
                   (results.companyLogoImgName)) {
@@ -69,11 +69,11 @@
               /* eslint-disable max-nested-callbacks */
               promises.push(
                 storage.ref(dynamicKey).getDownloadURL()
-                .then(url => {
+                .then((url) => {
                   return {
                     dynamicComponent,
                     dynamicKey,
-                    url
+                    url,
                   };
                 })
               );
@@ -81,10 +81,10 @@
             });
             return Promise.all(promises);
           })
-          .then(results => {
+          .then((results) => {
             let finalResults = results[0];
             results = results.slice(1);
-            results.forEach(result => {
+            results.forEach((result) => {
               finalResults[result.dynamicComponent] = result.url;
             });
             if (PWASSEMBLE.DEBUG_MODE) {
@@ -94,11 +94,11 @@
             idbKeyval.set(id, finalResults);
             return finalResults;
           })
-          .catch(error => reject(error));
+          .catch((error) => reject(error));
         })
-        .then(instance => resolve(instance))
-        .catch(error => reject(error));
+        .then((instance) => resolve(instance))
+        .catch((error) => reject(error));
       });
-    }
+    },
   };
 })(window.PWASSEMBLE || {});
