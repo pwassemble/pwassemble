@@ -108,6 +108,7 @@ form input {
   padding: .25rem;
   width: 80%;
   height: 2.5rem;
+  -webkit-appearance: none;
 }
 
 form button {
