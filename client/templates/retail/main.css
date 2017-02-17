@@ -96,7 +96,7 @@ form div {
 }
 
 form input {
-  font-size: .75rem;
+  font-size: 16px;
   font-weight: lighter;
   color: var(--colorFgSecondary);
   background-color: rgba(255,255,255,.75);
