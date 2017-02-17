@@ -135,6 +135,7 @@ form button {
   display: flex;
   flex-direction: column;
   margin: .25rem;
+  overflow: hidden;
   text-align: center;
   width: 5rem;
 }
@@ -164,6 +165,10 @@ form button {
   font-size: 1.25rem;
   padding: .25rem 1rem .25rem .25rem;
   text-decoration: none;
+}
+
+.close-menu {
+  margin-left: 90%;
 }
 
 .logo {

@@ -135,6 +135,10 @@ p {
   text-decoration: none;
 }
 
+.close-menu {
+  margin-left: 90%;
+}
+
 .logo {
   height: 7.5vh;
   margin: .25rem;
