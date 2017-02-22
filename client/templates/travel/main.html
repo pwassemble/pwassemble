@@ -1,10 +1,18 @@
 <header>
+  <a class="open-menu" aria-label="Open Menu" href="#nav" >☰</a>
   <img class="logo" src="${PWASSEMBLE.instance.companyLogoImgId}">
-  <nav>
-    <button class="user-menu">👤</button>
-    <button class="hamburger-menu">☰</button>
-  </nav>
 </header>
+<nav id="nav">
+  <a class="close-menu" aria-label="Close Menu" href="#">ⓧ</a>
+  <ul>
+    <li><a href="${location.href}">🏠 Home</a></li>
+    <li><a href="#">🛫 Flights</a></li>
+    <li><a href="#">🏨 Hotels</a></li>
+    <li><a href="#">🛳 Cruises</a></li>
+    <li><a href="#">💼 Careers</a></li>
+    <li><a href="#"><img class="logo-inline" src="${PWASSEMBLE.instance.iconImgId}" alt=""> About us</a></li>
+  </ul>
+</nav>
 <main>
   <h1>${PWASSEMBLE.instance.companyName}</h1>
   <h2>${PWASSEMBLE.instance.heroText}</h2>
