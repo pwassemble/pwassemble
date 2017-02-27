@@ -26,16 +26,17 @@ nav {
   padding: .25rem;
   background-color: var(--colorFgSecondary);
   z-index: 1;
+  will-change: transform;
 }
 
 nav:not(:target) {
-  left: -100vw;
-  transition: left .5s;
+  transform: translateX(-100vw);
+  transition: transform .5s;
 }
 
 nav:target {
-  left: 0;
-  transition: left .5s;
+  transform: translateX(0);
+  transition: transform .5s;
 }
 
 nav ul {
