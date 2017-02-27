@@ -44,7 +44,6 @@
                         videos.push(
                             `<source src="${proxyHttps(enc.url)}"></source>`);
                       }
-                      return 0;
                     }).join('') + (videos.length ?
                         `<p><video controls>${videos.join('\n')}</video></p>` :
                         '')
