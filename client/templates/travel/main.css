@@ -47,6 +47,7 @@ nav {
   padding: .25rem;
   background-color: var(--colorBgSecondary);
   z-index: 1;
+  will-change: transform;
 }
 
 nav:not(:target) {
