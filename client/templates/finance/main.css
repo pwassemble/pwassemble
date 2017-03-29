@@ -52,7 +52,7 @@ nav a {
 }
 
 #container > header {
-  background-color: white;
+  background-color: var(--colorBgPrimary);
   border-bottom: solid .5rem var(--colorFgPrimary);
   color: var(--colorFgPrimary);
   display: flex;
