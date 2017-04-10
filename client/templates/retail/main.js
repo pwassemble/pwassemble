@@ -26,7 +26,7 @@ return e.forEach(function(e){n[++t]=e}),n}e.exports=n},function(e,t){function n(
   const submitButton = document.querySelector('#submit');
   const productsDiv = document.querySelector('#products');
   const queryInput = document.querySelector('#query');
-  const cameraButton = document.querySelector('#camera');
+  // const cameraButton = document.querySelector('#camera'); // TODO
 
   const showFallbackImage = (imgErrorEvent) => {
     imgErrorEvent.target.src = `${location.origin}/static/offline.svg`;

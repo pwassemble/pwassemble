@@ -53,9 +53,9 @@ nav a {
 }
 
 #container > header {
-  background-color: black;
+  background-color: var(--colorBgPrimary);
   border-bottom: solid .5rem var(--colorFgPrimary);
-  color: white;
+  color: var(--colorFgPrimary);
   display: flex;
   flex-shrink: 0;
   text-align: center;
@@ -70,14 +70,14 @@ nav a {
 
 #container > footer {
   border-top: solid .5rem var(--colorFgPrimary);
-  background-color: black;
-  color: white;
+  background-color: var(--colorBgPrimary);
+  color: var(--colorFgPrimary);
   flex-shrink: 0;
   font-size: .75rem;
 }
 
 #pushNotificationsToggle {
-  color: white;
+  color: var(--colorFgPrimary);
   padding-left: .5rem;
 }
 
@@ -103,9 +103,9 @@ form input {
   background-color: rgba(255,255,255,.75);
   border-radius: 0;
   border-right: none;
-  border-left: solid black 1px;
-  border-top: solid black 1px;
-  border-bottom: solid black 1px;
+  border-left: solid var(--colorFgPrimary) 1px;
+  border-top: solid var(--colorFgPrimary) 1px;
+  border-bottom: solid var(--colorFgPrimary) 1px;
   padding: .25rem;
   width: 80%;
   height: 2.5rem;
@@ -117,15 +117,15 @@ form button {
   color: var(--colorFgPrimary);
   background-color: var(--colorBgPrimary);
   border-left: none;
-  border-right: solid black 1px;
-  border-top: solid black 1px;
-  border-bottom: solid black 1px;
+  border-right: solid var(--colorFgPrimary) 1px;
+  border-top: solid var(--colorFgPrimary) 1px;
+  border-bottom: solid var(--colorFgPrimary) 1px;
   height: 2.5rem;
   width: 10%;
 }
 
 #products {
-  background-color: white;
+  background-color: var(--colorBgPrimary);
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -150,8 +150,8 @@ form button {
 }
 
 #products figure figcaption {
-  background-color: var(--colorBgPrimary);
-  color: var(--colorFgPrimary);
+  background-color: var(--colorBgSecondary);
+  color: var(--colorFgSecondary);
   font-size: .6rem;
   font-weight: light;
   flex-grow: 1;
@@ -162,9 +162,9 @@ form button {
 }
 
 .open-menu, .close-menu {
-  background-color: transparent;
+  background-color: var(--colorBgPrimary);
   border: none;
-  color: #fff;
+  color: var(--colorFgPrimary);
   font-size: 1.25rem;
   padding: .25rem 1rem .25rem .25rem;
   text-decoration: none;
