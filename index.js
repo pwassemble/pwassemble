@@ -29,6 +29,7 @@ app.use('/templates', express.static('client/dist/templates'));
 
 app.get('/hello', routes.hello);
 app.get('/feeds', routes.feeds);
+app.get('/article', routes.article);
 app.get('/assets', routes.assets);
 app.get('/manifests', routes.manifests);
 app.get('/proxy', routes.proxy);

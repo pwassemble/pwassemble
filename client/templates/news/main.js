@@ -22,7 +22,7 @@
     });
   }
 
-  function getHtml(entries) {
+  function getHtml(entries, isFullArticle = false) {
     // Helper function to proxy unsecure HTTP URLs over HTTPS
     const proxyHttps = (url) => /^http:\/\//.test(url) ?
         `./proxy?url=${encodeURIComponent(url)}` : url;
@@ -31,10 +31,16 @@
           let videos = [];
           return `
               <article ${entry.meta.language ?
-                  `lang="${entry.meta.language}"` : ''}>
+                  `lang="${entry.meta.language}"` : ''}
+                  ${isFullArticle ? '' : `data-url="${entry.link}"`}>
                 <header>
-                  <a href="${entry.link}"><h2>${entry.title}</h2></a>
+                  <a href="${entry.link}">
+                    <h2 ${isFullArticle ? '' : `data-url="${entry.link}"`}>
+                      ${entry.title}
+                    </h2>
+                  </a>
                 </header>
+                <section>
                 ${entry.enclosures.length ?
                     (entry.enclosures.map((enc) => {
                       if (/^image/.test(enc.type)) {
@@ -53,11 +59,17 @@
                     `<p><img alt="" src="${proxyHttps(entry.image.url)}"></p>` :
                     ''}
                 ${entry.description ? // eslint-disable-line no-nested-ternary
-                    `<section>${entry.description}</section>` :
+                    `${entry.description}` :
                     (entry.summary ?
-                        `<section>${entry.summary}</section>` :
+                        `${entry.summary}` :
                         '')}
+                </section>
                 <footer>
+                  ${!isFullArticle ?
+                      `<button data-url="${entry.link}">
+                        Read full article
+                      </button>` :
+                      ''}
                   <p>Posted on
                     <time datetime="${new Date(entry.date).toISOString()}">
                       ${new Date(entry.date).toLocaleString()}
@@ -69,17 +81,91 @@
         }).join('\n')}`);
   }
 
+  function getFullArticle(url, entry) {
+    fetch(`./article?url=${encodeURIComponent(url)}`)
+    .then((response) => {
+      if (!response.ok) {
+        throw Error('Full article fetch error');
+      }
+      return response.json();
+    })
+    .then((fullArticle) => {
+      let entries = [{
+        title: entry.title,
+        meta: {
+          language: entry.meta.language,
+        },
+        link: url,
+        enclosures: [],
+        description: fullArticle.text.replace(/\n/g, '<br>'),
+        date: entry.date,
+        author: entry.author,
+      }];
+      if (fullArticle.image) {
+        entries[0].enclosures.push({
+          url: fullArticle.image,
+          type: 'image',
+        });
+      }
+      if (fullArticle.videos) {
+        fullArticle.videos.forEach((video) => {
+          entries[0].enclosures.push({
+            url: video.src,
+            type: 'video',
+          });
+        });
+      }
+      getHtml(entries, true)
+      .then((html) => {
+        const main = container.querySelector('main');
+        const article = main.querySelector(`article[data-url="${url}"]`);
+        const temp = document.createElement('div');
+        temp.innerHTML = html;
+        const fullArticle = temp.querySelector('article');
+        article.parentNode.replaceChild(fullArticle, article);
+        fullArticle.scrollIntoView();
+      });
+    })
+    .catch((fetchError) => {
+      throw fetchError;
+    });
+  }
+
+  let entries;
   getFeed(PWASSEMBLE.instance.rssFeed)
-  .then((entries) => getHtml(entries))
+  .then((_entries) => {
+    entries = _entries;
+    return getHtml(entries);
+  })
   .then((html) => {
     const container = document.querySelector('#container');
-    container.querySelector('main').innerHTML = html;
+    const main = container.querySelector('main');
+    main.innerHTML = html;
+    // Handle failing images
     const showFallbackImage = (imgErrorEvent) => {
       imgErrorEvent.target.src = `${location.origin}/static/offline.svg`;
     };
     for (let img of container.querySelectorAll('img')) {
       img.addEventListener('error', showFallbackImage);
     }
+    // Full article request clicks
+    main.addEventListener('click', (e) => {
+      const target = e.target;
+      if (((target.nodeName !== 'BUTTON') || (target.nodeName !== 'H2')) &&
+          (!target.dataset.url)) {
+        return;
+      }
+      e.preventDefault();
+      const url = target.dataset.url;
+      let entry;
+      for (let i = 0, lenI = entries.length; i < lenI; i++) {
+        if (entries[i].link === url) {
+          entry = entries[i];
+          break;
+        }
+      }
+      getFullArticle(url, entry);
+    });
   })
   .catch((error) => {
     console.log(PWASSEMBLE.TEMPLATE_PREFIX, error);

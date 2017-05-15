@@ -8,6 +8,7 @@ const request = require('request');
 const sharp = require('sharp');
 const imagemin = require('imagemin');
 const fileType = require('file-type');
+const extractor = require('unfluff');
 const products = require('amazon-products-api')({
   AccessKey: process.env.AMAZON_ACCESS_KEY_ID,
   SecretKey: process.env.AMAZON_SECRET_ACCESS_KEY,
@@ -46,7 +47,19 @@ const routes = {
         items.push(item);
       }
     });
-    feedParser.on('end', () => res.send(items));
+    feedParser.on('end', () => {
+      return res.send(items);
+    });
+  },
+
+  article(req, res) {
+    request.get(req.query.url, (err, response, body) => {
+      if (err || response.statusCode !== 200) {
+        return res.send({});
+      }
+      const data = extractor(body);
+      return res.send(data);
+    });
   },
 
   assets(req, res) {

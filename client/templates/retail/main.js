@@ -39,7 +39,12 @@ return e.forEach(function(e){n[++t]=e}),n}e.exports=n},function(e,t){function n(
     }
     productsDiv.innerHTML = '⏳ Searching for products…';
     fetch(`./products?query=${query.toLowerCase()}&category=${category}`)
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw Error('Product search fetch error');
+      }
+      return response.json();
+    })
     .then((json) => {
       const html = json.map((product) => {
         return `
