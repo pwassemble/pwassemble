@@ -1,6 +1,7 @@
 'use strict';
 
 const compression = require('compression');
+const forceSsl = require('force-ssl-heroku');
 const express = require('express');
 const app = express();
 const routes = require('./routes.js');
@@ -12,6 +13,7 @@ minify.minifyStatic();
 
 optimize.optimizeStatic();
 
+app.use(forceSsl);
 app.use(compression({threshold: 0}));
 app.use(require('helmet')());
 
