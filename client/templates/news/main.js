@@ -82,6 +82,10 @@
   }
 
   function getFullArticle(url, entry) {
+    window.location = `#${(new URL(url)).pathname}`;
+    const main = container.querySelector('main');
+    const article = main.querySelector(`article[data-url="${url}"]`);
+    article.innerHTML =
     fetch(`./article?url=${encodeURIComponent(url)}`)
     .then((response) => {
       if (!response.ok) {
@@ -117,8 +121,6 @@
       }
       getHtml(entries, true)
       .then((html) => {
-        const main = container.querySelector('main');
-        const article = main.querySelector(`article[data-url="${url}"]`);
         const temp = document.createElement('div');
         temp.innerHTML = html;
         const fullArticle = temp.querySelector('article');

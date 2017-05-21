@@ -145,6 +145,9 @@ const minify = {
     }
     const staticDir = path.join(__dirname, 'client');
     const distDir = path.join(__dirname, 'client', 'dist');
+    fse.copySync(
+        path.join(staticDir, 'push-message.json'),
+        path.join(distDir, 'push-message.json'));
     let rootFiles = [];
     ls(staticDir)
     .then((files) => {

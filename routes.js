@@ -47,9 +47,7 @@ const routes = {
         items.push(item);
       }
     });
-    feedParser.on('end', () => {
-      return res.send(items);
-    });
+    feedParser.on('end', () => res.send(items));
   },
 
   article(req, res) {

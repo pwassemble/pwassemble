@@ -1,8 +1,8 @@
 const DEBUG_MODE = true;
 const DEBUG_PREFIX = '👷';
 
-const STATIC_CACHE_NAME = 'pwassemble-static-cache-v20170515';
-const DYNAMIC_CACHE_NAME = 'pwassemble-dynamic-cache-v20170515';
+const STATIC_CACHE_NAME = 'pwassemble-static-cache-v20170521';
+const DYNAMIC_CACHE_NAME = 'pwassemble-dynamic-cache-v20170521';
 const STATIC_FILES = [
   './',
   './index.html',
@@ -121,6 +121,7 @@ const getNetworkResponse = (request, options = {}) => {
         '"no-cors"' : '"cors"'}`,
         requestUrl);
   }
+  options.credentials = 'include';
   return fetch(request, options)
   .then((networkResponse) => {
     if (networkResponse.type !== 'opaque' && !networkResponse.ok) {
@@ -133,7 +134,7 @@ const getNetworkResponse = (request, options = {}) => {
     return networkResponse;
   })
   .catch((networkError) => {
-    if (Object.keys(options).length) {
+    if (options.mode && options.mode === 'no-cors') {
       if (DEBUG_MODE) {
         console.log(DEBUG_PREFIX, 'Error fetching from network', requestUrl);
       }
@@ -281,7 +282,7 @@ self.addEventListener('push', (pushEvent) => {
   pushEvent.waitUntil(fetch('push-message.json')
   .then((fetchResponse) => fetchResponse.json())
   .then((pushMessage) => {
-    self.registration.showNotification(pushMessage.title, pushMessage.message);
+    self.registration.showNotification(pushMessage.title, pushMessage.options);
   })
   .catch(() => {
     self.registration.showNotification('New push notification');
