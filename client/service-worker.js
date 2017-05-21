@@ -121,7 +121,6 @@ const getNetworkResponse = (request, options = {}) => {
         '"no-cors"' : '"cors"'}`,
         requestUrl);
   }
-  options.credentials = 'include';
   return fetch(request, options)
   .then((networkResponse) => {
     if (networkResponse.type !== 'opaque' && !networkResponse.ok) {
@@ -134,7 +133,7 @@ const getNetworkResponse = (request, options = {}) => {
     return networkResponse;
   })
   .catch((networkError) => {
-    if (options.mode && options.mode === 'no-cors') {
+    if (Object.keys(options).length) {
       if (DEBUG_MODE) {
         console.log(DEBUG_PREFIX, 'Error fetching from network', requestUrl);
       }
