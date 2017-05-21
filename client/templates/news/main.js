@@ -82,7 +82,6 @@
   }
 
   function getFullArticle(url, entry) {
-    window.location = `#${(new URL(url)).pathname}`;
     const main = container.querySelector('main');
     const article = main.querySelector(`article[data-url="${url}"]`);
     article.innerHTML =
