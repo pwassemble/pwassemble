@@ -115,6 +115,9 @@ window.PWASSEMBLE = {
           });
         } else if ((key === 'colorBgPrimary' || (key === 'colorBgSecondary') ||
             (key === 'colorFgPrimary') || (key === 'colorFgSecondary'))) {
+          if (key === 'colorBgPrimary') {
+            head.appendChild(createMeta('theme-color', value));
+          }
           cssText.push(`--${key}: ${value};`);
         }
       }
