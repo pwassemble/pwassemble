@@ -12,7 +12,7 @@
       return response.text()
       // Rewrite non-http links and proxy them locally
       .then((raw) => JSON.parse(raw.replace(
-          /src=(\\["'])(http:\/\/.*?)(?:\\["'])/g,
+          /src=(\\?["'])(http:\/\/.*?)(?:\\["'])/g,
           (_, p1, p2) => {
             return `src=${p1}./proxy?url=${encodeURIComponent(p2)}${p1}`;
           })));
