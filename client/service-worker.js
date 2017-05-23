@@ -50,11 +50,6 @@ REQUEST_STRATEGIES.set(/www\.googleapis\.com/, {
   strategy: 'networkFirst',
   cache: true,
 });
-// Remote Firebase static resources
-REQUEST_STRATEGIES.set(/firebasestorage\.googleapis\.com/, {
-  strategy: 'cacheFirst',
-  cache: true,
-});
 
 const addToCache = (request, networkResponse) => {
   const requestUrl = request.url;
