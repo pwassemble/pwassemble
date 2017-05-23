@@ -6,7 +6,10 @@
         if (!location.search) {
           return reject(console.log('No query parameters'));
         }
-        const id = new URLSearchParams(location.search).get('id');
+        // Manually ignoring the leading '?', due to a bug in Samsung Internet:
+        // https://github.com/SamsungInternet/support/issues/8
+        const id = new URLSearchParams(location.search.replace(/^\?/, ''))
+            .get('id');
         if (!id || !/^\d+$/.test(id)) {
           return reject(console.log('No or invalid "id" parameter'));
         }
