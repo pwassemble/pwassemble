@@ -160,7 +160,7 @@
             iconImgId: config.iconImgId || config.homescreenIconUrl,
             rssFeed: config.rssFeed || '',
             subText: config.subText,
-            template: config.template || 'news',
+            template: config.template || 'travel',
           };
           if (PWASSEMBLE.DEBUG_MODE) {
             console.log(PWASSEMBLE.DEBUG_PREFIX, adaptor);
