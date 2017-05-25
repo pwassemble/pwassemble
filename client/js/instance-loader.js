@@ -3,7 +3,8 @@
   PWASSEMBLE.googleCloudStorageLoader = {
     load(id) {
       return fetch(`./proxy?url=${encodeURIComponent(
-          `https://storage.googleapis.com/${id}/result.txt`)}`)
+          `https://storage.googleapis.com/${id}/configuration.json`)}`,
+          {cache: 'no-store'})
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -160,7 +161,8 @@
             iconImgId: config.iconImgId || config.homescreenIconUrl,
             rssFeed: config.rssFeed || '',
             subText: config.subText,
-            template: config.template || 'travel',
+template: config.template || 'news',
+rssFeed: 'https://bit.ly/2qEeREM',
           };
           if (PWASSEMBLE.DEBUG_MODE) {
             console.log(PWASSEMBLE.DEBUG_PREFIX, adaptor);
