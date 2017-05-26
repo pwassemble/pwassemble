@@ -81,11 +81,10 @@ nav a {
 article {
   background: rgba(255, 255, 255, .95);
   margin: .5rem;
-  hypens: auto;
+  hyphens: auto;
   padding: .5rem;
   line-height: 1.5;
   letter-spacing: 0.01rem;
-  font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
