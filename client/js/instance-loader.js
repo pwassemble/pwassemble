@@ -159,10 +159,11 @@
             heroImgId: config.heroImgId || config.heroImageUrl,
             heroText: config.heroText,
             iconImgId: config.iconImgId || config.homescreenIconUrl,
-            rssFeed: config.rssFeed || '',
+            rssFeed: config.rssFeed || 'https://bit.ly/2qEeREM', // TODO
+            productQuery: config.productQuery || '',
+            productCategory: config.productCategory || '',
             subText: config.subText,
-template: config.template || 'news',
-rssFeed: 'https://bit.ly/2qEeREM',
+            template: config.template || 'news', // TODO
           };
           if (PWASSEMBLE.DEBUG_MODE) {
             console.log(PWASSEMBLE.DEBUG_PREFIX, adaptor);
