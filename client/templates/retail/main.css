@@ -153,7 +153,7 @@ form button {
   background-color: var(--colorBgSecondary);
   color: var(--colorFgSecondary);
   font-size: .6rem;
-  font-weight: light;
+  font-weight: lighter;
   flex-grow: 1;
   max-height: 3rem;
   text-align: center;

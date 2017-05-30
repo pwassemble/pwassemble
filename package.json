@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint . --fix"
+    "lint": "eslint . --fix && stylelint \"**/*.css\""
   },
   "repository": {
     "type": "git",
@@ -58,7 +58,8 @@
   },
   "devDependencies": {
     "eslint": "^3.19.0",
-    "eslint-config-google": "^0.7.1"
+    "eslint-config-google": "^0.7.1",
+    "stylelint-csstree-validator": "^1.1.1"
   },
   "eslintConfig": {
     "parserOptions": {
@@ -73,5 +74,14 @@
       "serviceworker": true,
       "node": true
     }
+  },
+  "stylelint": {
+    "plugins": [
+      "stylelint-csstree-validator"
+    ],
+    "rules": {
+      "csstree/validator": true
+    },
+    "ignoreFiles": "client/dist/**"
   }
 }
