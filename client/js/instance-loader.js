@@ -159,9 +159,10 @@
             heroImgId: config.heroImgId || config.heroImageUrl,
             heroText: config.heroText,
             iconImgId: config.iconImgId || config.homescreenIconUrl,
-            rssFeed: config.rssFeed || 'https://bit.ly/2qEeREM', // TODO
+            rssFeed: config.rssFeed,
             productQuery: config.productQuery || '',
             productCategory: config.productCategory || '',
+            pwaInstanceId: config.pwaInstanceId || config.bucketName,
             subText: config.subText,
             template: config.template || 'news', // TODO
           };
