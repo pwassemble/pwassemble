@@ -1,8 +1,8 @@
 const DEBUG_MODE = true;
 const DEBUG_PREFIX = '👷';
 
-const STATIC_CACHE_NAME = 'pwassemble-static-cache-v20170621';
-const DYNAMIC_CACHE_NAME = 'pwassemble-dynamic-cache-v20170621';
+const STATIC_CACHE_NAME = 'pwassemble-static-cache-v20170622';
+const DYNAMIC_CACHE_NAME = 'pwassemble-dynamic-cache-v20170622';
 const STATIC_FILES = [
   './',
   './index.html',

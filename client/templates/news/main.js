@@ -65,11 +65,6 @@
                         '')}
                 </section>
                 <footer>
-                  ${!isFullArticle ?
-                      `<button data-url="${entry.link}">
-                        Read full article
-                      </button>` :
-                      ''}
                   <p>Posted on
                     <time datetime="${new Date(entry.date).toISOString()}">
                       ${new Date(entry.date).toLocaleString()}
@@ -81,10 +76,9 @@
         }).join('\n')}`);
   }
 
-  function getFullArticle(url, entry) {
+  function getFullArticle(url, entry, target) {
     const main = container.querySelector('main');
     const article = main.querySelector(`article[data-url="${url}"]`);
-    article.innerHTML =
     fetch(`./article?url=${encodeURIComponent(url)}`)
     .then((response) => {
       if (!response.ok) {
@@ -93,6 +87,9 @@
       return response.json();
     })
     .then((fullArticle) => {
+      if (!fullArticle.text) {
+        throw Error('Full article fetch error');
+      }
       let entries = [{
         title: entry.title,
         meta: {
@@ -118,17 +115,18 @@
           });
         });
       }
-      getHtml(entries, true)
+      return getHtml(entries, true)
       .then((html) => {
         const temp = document.createElement('div');
         temp.innerHTML = html;
         const fullArticle = temp.querySelector('article');
         article.parentNode.replaceChild(fullArticle, article);
-        fullArticle.scrollIntoView();
+        target.classList.remove('loading-content');
       });
     })
     .catch((fetchError) => {
-      throw fetchError;
+      target.classList.remove('loading-content');
+      console.error(fetchError);
     });
   }
 
@@ -152,10 +150,12 @@
     // Full article request clicks
     main.addEventListener('click', (e) => {
       const target = e.target;
-      if (((target.nodeName !== 'BUTTON') || (target.nodeName !== 'H2')) &&
+      // The full article has been fetched, now link to the actual source
+      if ((target.nodeName === 'H2') &&
           (!target.dataset.url)) {
         return;
       }
+      target.classList.add('loading-content');
       e.preventDefault();
       const url = target.dataset.url;
       let entry;
@@ -165,7 +165,7 @@
           break;
         }
       }
-      getFullArticle(url, entry);
+      getFullArticle(url, entry, target);
     });
   })
   .catch((error) => {

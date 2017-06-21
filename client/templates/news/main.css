@@ -99,6 +99,16 @@ article header a {
   text-decoration: none;
 }
 
+article h2.loading-content {
+  animation: loading 2s linear infinite;
+}
+@keyframes loading {
+  50% {
+    color: var(--colorFgPrimary);
+    background-color: var(--colorFgSecondary);
+  }
+}
+
 article section {
   font-family: serif;
 }
