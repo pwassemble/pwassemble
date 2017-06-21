@@ -126,7 +126,7 @@
     })
     .catch((fetchError) => {
       target.classList.remove('loading-content');
-      console.error(fetchError);
+      document.location.href = url;
     });
   }
 
