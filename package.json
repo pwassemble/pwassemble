@@ -1,6 +1,6 @@
 {
   "name": "pwassemble",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "PWAssemble: Progressive Web App demonstration.",
   "engines": {
     "node": "6.9.x"
