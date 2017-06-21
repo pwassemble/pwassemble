@@ -151,7 +151,8 @@
             colorBgSecondary:
                 config.colorBgSecondary || config.secondaryBgColor,
             colorFgPrimary: config.colorFgPrimary || config.primaryFgColor,
-            colorFgSecondary: config.colFrBgPrimary || config.primaryFgColor,
+            colorFgSecondary:
+                config.colorFgSecondary || config.secondaryFgColor,
             companyLogoImgId:
                 config.companyLogoImgId || config.companyLogoUrl,
             companyName: config.companyName,

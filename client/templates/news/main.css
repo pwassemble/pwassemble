@@ -107,14 +107,14 @@ article section a {
   color: black;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1200px) {
   article img, video, figure, div, p, a, iframe {
     max-width: 100% !important;
   }
 }
-@media (min-width: 1001px) {
+@media (min-width: 1201px) {
   article img, video, figure, div, p, a, iframe {
-    max-width: 1000px !important;
+    max-width: 1200px !important;
   }
 }
 
