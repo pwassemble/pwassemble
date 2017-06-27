@@ -3,7 +3,8 @@
   PWASSEMBLE.googleCloudStorageLoader = {
     load(id) {
       return fetch(`./proxy?url=${encodeURIComponent(
-          `https://storage.googleapis.com/${id}/configuration.json`)}`,
+          `https://storage.googleapis.com/${id}/configuration.json?nocache=${
+              Date.now()}`)}`,
           {cache: 'no-store'})
       .then((response) => {
         if (response.ok) {
