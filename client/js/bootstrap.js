@@ -134,11 +134,11 @@ window.PWASSEMBLE = {
       return PWASSEMBLE.templateLoader.create();
     })
     .then((content) => {
+      body.querySelector('.loading').remove();
       fragment.appendChild(content.html);
       head.appendChild(content.css);
       body.appendChild(fragment);
       head.appendChild(content.js);
-      body.querySelector('.loading').remove();
 
       // Set up push notifications
       if (PWASSEMBLE.serviceWorkerRegistration) {

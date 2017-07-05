@@ -36,6 +36,13 @@ h2 {
   vertical-align: middle;
 }
 
+.loading::before {
+  content: "Loading";
+  font-size: .5em;
+  position: absolute;
+  transform: translate(-25%, 50%);
+}
+
 .loading.earth::after {
   animation: spin .5s steps(3) infinite;
   content: "🌍\A🌎\A🌏";
