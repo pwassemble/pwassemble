@@ -3,7 +3,8 @@
   "version": "1.0.2",
   "description": "PWAssemble: Progressive Web App demonstration.",
   "engines": {
-    "node": "6.9.x"
+    "node": "4.8.x",
+    "npm": "2.15.x"
   },
   "main": "index.js",
   "scripts": {
