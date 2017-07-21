@@ -1,0 +1,29 @@
+{
+  "name": "PWAssemble",
+  "description": "PWAssemble: Progressive Web App demonstration.",
+  "authors": [
+    "Thomas Steiner <tomac@google.com> (https://blog.tomayac.com/)"
+  ],
+  "license": "Apache-2.0",
+  "keywords": [
+    "progressive",
+    "web",
+    "app",
+    "pwa",
+    "pwassemble"
+  ],
+  "homepage": "https://github.com/pwassemble/pwassemble",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "^2.0.2",
+    "paper-icon-button": "^2.0.0",
+    "paper-spinner": "^2.0.0"
+  }
+}

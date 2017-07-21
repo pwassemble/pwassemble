@@ -81,8 +81,10 @@ const minifyCss = (code, file, destFile, returnCss = false) => {
 const minify = {
   minifyTemplates() {
     const templatesDir = path.join(__dirname, 'client', 'templates');
-    const distDir = path.join(__dirname, 'client', 'dist', 'templates');
-    fse.emptyDirSync(distDir);
+    const distRootDir = path.join(__dirname, 'client', 'dist');
+    const distDir = path.join(distRootDir, 'templates');
+    fse.emptyDirSync(distRootDir);
+    fse.mkdirSync(distDir);
     ls(templatesDir)
     .then((templates) => Promise.all(templates.map((file) => ls(file))))
     .then((results) => {
@@ -211,6 +213,8 @@ const minify = {
         const html = indexHtml.result.replace(/<style>.*?<\/style>/,
             `<style>${css}</style>`);
         fs.writeFileSync(indexHtml.destFile, html);
+        fse.copySync(path.join(staticDir, 'bower_components'),
+            path.join(distDir, 'js'));
       });
     })
     .catch((error) => {

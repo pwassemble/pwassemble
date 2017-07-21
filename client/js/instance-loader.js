@@ -10,8 +10,8 @@
         if (response.ok) {
           return response.json();
         }
-        throw Error(`Retriving ${id} failed with status code ${
-            response.statusCode}`);
+        throw Error(`Retriving ${id} failed with ${response.statusText} ${
+            response.status}`);
       })
       .catch((fetchError) => Promise.reject(fetchError));
     },

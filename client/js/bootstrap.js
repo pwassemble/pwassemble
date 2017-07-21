@@ -146,7 +146,8 @@ window.PWASSEMBLE = {
       }
     })
     .catch((error) => {
-      throw error;
+      body.querySelector('.loading').remove();
+      body.innerHTML = error;
     });
   };
 })(window.PWASSEMBLE || {});
