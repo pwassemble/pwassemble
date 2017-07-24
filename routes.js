@@ -9,11 +9,6 @@ const sharp = require('sharp');
 const imagemin = require('imagemin');
 const fileType = require('file-type');
 const extractor = require('unfluff');
-const products = require('amazon-products-api')({
-  AccessKey: process.env.AMAZON_ACCESS_KEY_ID,
-  SecretKey: process.env.AMAZON_SECRET_ACCESS_KEY,
-  Tag: process.env.AMAZON_ASSOCIATE_TAG,
-});
 
 const routes = {
   hello(req, res) {
@@ -136,25 +131,45 @@ const routes = {
   },
 
   products(req, res) {
-    products.operation('ItemSearch', {
-      SearchIndex: req.query.category ? req.query.category : 'All',
-      Keywords: req.query.query,
-      ResponseGroup: 'Images,ItemAttributes',
-    })
-    .then((response) => {
-      const json = response.Items.Item.map((item) => {
+    const GOOGLE_CSE_KEY = process.env.GOOGLE_CSE_KEY;
+    const GOOGLE_CSE_CX = process.env.GOOGLE_CSE_CX;
+    const query = req.query.query;
+    const category = req.query.category || '';
+    const url = `https://www.googleapis.com/customsearch/v1
+        ?key=${GOOGLE_CSE_KEY}
+        &cx=${GOOGLE_CSE_CX}
+        &quotaUser=${Math.random().toString().substr(2)}
+        &fileType=jpg,png
+        &imgColorType=color
+        &imgType=photo
+        &searchType=image
+        &imgSize=medium
+        &fields=items(link,title,image/contextLink,image/height,image/width)
+        &hq=${encodeURIComponent(category)}
+        &q=${encodeURIComponent(query)}`.replace(/\n\s*/gm, '');
+    const options = {
+      url: url,
+      json: true
+    };
+    request.get(options, (err, response, body) => {
+      if (err || response.statusCode !== 200) {
+        return res.sendStatus(404);
+      }
+      const json = body.items.map((item) => {
         return {
-          url: `./proxy?url=${encodeURIComponent(item.DetailPageURL)}`,
-          image: `./proxy?url=${encodeURIComponent(item.LargeImage.URL)}`,
-          name: item.ItemAttributes.Title,
+          url: `./proxy?url=${encodeURIComponent(item.image.contextLink)}`,
+          image: `./proxy?url=${encodeURIComponent(item.link)}`,
+          width: item.image.width,
+          height: item.image.height,
+          name: item.title
+              .replace(/\s*amazon(?:\.com)?\s*[\|:]\s*/gim, '')
+              .replace(/\s*(?:\.\.\.|…)$/gim, ''),
         };
       });
       return res.send(json);
-    })
-    .catch((error) => {
-      return res.sendStatus(404);
     });
-  },
+  }
+
 };
 
 module.exports = routes;
