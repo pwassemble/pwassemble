@@ -3,5 +3,28 @@
   flex-direction: column;
   height: 100vh;
   margin: 0;
+  padding: 0;
   position: relative;
+  width: 100vw;
+}
+
+app-header {
+  background-color: var(--colorBgPrimary);
+  color: var(--colorFgPrimary);
+}
+
+paper-icon-button {
+  --paper-icon-button-ink-color: var(--colorFgPrimary);
+}
+
+app-toolbar {
+  padding: 0;
+}
+
+app-drawer-layout:not([narrow]) [drawer-toggle] {
+  display: none;
+}
+
+main {
+  padding: .5rem;
 }

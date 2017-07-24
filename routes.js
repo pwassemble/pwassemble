@@ -149,7 +149,7 @@ const routes = {
         &q=${encodeURIComponent(query)}`.replace(/\n\s*/gm, '');
     const options = {
       url: url,
-      json: true
+      json: true,
     };
     request.get(options, (err, response, body) => {
       if (err || response.statusCode !== 200) {
@@ -168,7 +168,7 @@ const routes = {
       });
       return res.send(json);
     });
-  }
+  },
 
 };
 

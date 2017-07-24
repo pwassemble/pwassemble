@@ -1,5 +1,24 @@
 <link rel="import" href="js/polymer/polymer.html">
+<link rel="import" href="js/iron-icons/iron-icons.html">
 <link rel="import" href="js/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="js/paper-spinner/paper-spinner.html">
-<paper-spinner active>...</paper-spinner>
-<paper-icon-button icon="favorite"></paper-icon-button>
+<link rel="import" href="js/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="js/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="js/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="js/app-layout/app-header/app-header.html">
+<link rel="import" href="js/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="js/app-layout/app-toolbar/app-toolbar.html">
+
+<app-drawer-layout>
+  <app-drawer slot="drawer">
+    <paper-icon-button icon="close" drawer-toggle></paper-icon-button>
+  </app-drawer>
+  <app-header-layout>
+    <app-header slot="header" reveals effects="waterfall">
+      <app-toolbar>
+        <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+        <div main-title>${PWASSEMBLE.instance.companyName}</div>
+      </app-toolbar>
+    </app-header>
+    <main>Main Content</main>
+  </app-header-layout>
+</app-drawer-layout>
