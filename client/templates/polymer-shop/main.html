@@ -7,18 +7,61 @@
 <link rel="import" href="js/app-layout/app-header/app-header.html">
 <link rel="import" href="js/app-layout/app-header-layout/app-header-layout.html">
 <link rel="import" href="js/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="js/iron-ajax/iron-ajax.html">
+<link rel="import" href="js/iron-image/iron-image.html">
 
-<app-drawer-layout>
-  <app-drawer slot="drawer">
-    <paper-icon-button icon="close" drawer-toggle></paper-icon-button>
-  </app-drawer>
-  <app-header-layout>
-    <app-header slot="header" reveals effects="waterfall">
-      <app-toolbar>
-        <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-        <div main-title>${PWASSEMBLE.instance.companyName}</div>
-      </app-toolbar>
-    </app-header>
-    <main>Main Content</main>
-  </app-header-layout>
-</app-drawer-layout>
+<pwassemble-app>
+  <app-drawer-layout>
+    <app-drawer slot="drawer">
+      <paper-icon-button icon="close" drawer-toggle></paper-icon-button>
+      <div>Menu</div>
+    </app-drawer>
+    <app-header-layout>
+      <app-header slot="header" reveals effects="waterfall">
+        <app-toolbar>
+          <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+          <div main-title>${PWASSEMBLE.instance.companyName}</div>
+        </app-toolbar>
+      </app-header>
+      <main>
+        <div>Main</div>
+        <form id="signup" method="post">
+          <input name="id" type="text" autocomplete="username email" required>
+          <label for="id">E-Mail</label>
+          <br>
+          <input name="name" type="text" autocomplete="name" required>
+          <label for="name">Name</label>
+          <br>
+          <input name="password" type="password" autocomplete="new-password" required>
+          <label for="password">Password</label>
+          <br>
+          <input type="submit" value="Sign Up">
+        </form>
+        <button id="login">Log In</button>
+        <button id="logout">Log Out</button>
+        <form id="search">
+          <input id="query" type="search">
+          <input type="submit" value="Search">
+        </form>
+        <iron-ajax auto
+            url="/products"
+            params='{"query": "bestsellers"}'
+            handle-as="json">
+        </iron-ajax>
+        <div class="horizontal-section-container">
+          <dom-repeat>
+            <template>
+              <div class="horizontal-section">
+                <h2><a href="[[item.url]]" target="_blank">[[item.name]]</a></h2>
+                <iron-image src="[[item.image]]" width="256" height="256" sizing="cover" preload fade></iron-image>
+                <p>[[item.name]]</p>
+              </div>
+            </template>
+          </dom-repeat>
+        </div>
+      </main>
+    </app-header-layout>
+  </app-drawer-layout>
+</pwassemble-app>
+
+<link rel="import" href="templates/polymer-shop/pwassemble-app.min.html">

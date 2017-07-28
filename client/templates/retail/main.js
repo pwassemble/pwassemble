@@ -46,7 +46,10 @@ return e.forEach(function(e){n[++t]=e}),n}e.exports=n},function(e,t){function n(
       return response.json();
     })
     .then((json) => {
-      const html = json.map((product) => {
+      if (!json.items && !json.items.length) {
+        throw Error('Product search fetch error');
+      }
+      const html = json.items.map((product) => {
         return `
             <figure class="product">
               <a class="product-url"

@@ -166,7 +166,7 @@ const routes = {
               .replace(/\s*(?:\.\.\.|…)$/gim, ''),
         };
       });
-      return res.send(json);
+      return res.send({items: json});
     });
   },
 
