@@ -139,6 +139,8 @@ window.PWASSEMBLE = {
       head.appendChild(content.css);
       body.appendChild(fragment);
       head.appendChild(content.js);
+      body.removeAttribute('unresolved');
+      document.documentElement.removeAttribute('unresolved');
 
       // Set up push notifications
       if (PWASSEMBLE.serviceWorkerRegistration) {
